@@ -1,0 +1,57 @@
+	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+	<head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>Stalkerbot</title>
+        <link href="screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="header">
+                <img src="img/stalkerbot.png" alt="stalkerbot" />
+                <span>stalkerbot</span>
+                <p>
+                    Reveal how a HN user feels
+                    based on their comments
+                </p>
+            </div>
+            <form id="st_form" action="stalkerbot_submit" method="get" accept-charset="utf-8">
+                <input id="st_input" type="text" placeholder="Hacker News Name">
+                <input type="submit" value="Submit">
+            </form>
+            <div id="results">
+                <ul id="topic">
+                    <!--<li>-->
+                        <!--<div class="tag">javascript</div>-->
+                        <!--<img src="img/anxious.png" alt="anxious" />-->
+                        <!--<div class="sentiment">Anxious</div>-->
+                    <!--</li>-->
+                </ul>
+            </div>
+        </div>
+
+        <script type="text/javascript" charset="utf-8">
+            $('#st_form').submit(function(e) {
+                e.preventDefault();
+                var val = $("#st_input", this).val();
+                var url = '/stalk';
+
+                console.log(val);
+
+                $.ajax({url: url, data:{ userid:val}, success:function(data) {
+
+                    console.log(data);
+            
+                    var tagname = data.tagname;
+                    var sentiment = data.sentiment;
+
+                    var li = $('<li class="object"><div class="tag">' + tagname + '</div><img src="img/' + sentiment + '.png" alt="sentiment" /><div class="sentiment">' + sentiment + '</div></li>');
+                    $('#topic').append(li);
+                    }});
+            });
+
+        </script>
+    
+    </body>
+
