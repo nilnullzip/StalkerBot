@@ -6,6 +6,9 @@ cgitb.enable()
 import SimpleHTTPServer
 import SocketServer
 import os, sys
+
+sys.path.append("../src")
+
 import commentAndIdToTagSentiment as TS
 #from commentAndIdToTagSentiment import commentAndIdToTagSentiment as TS
 
