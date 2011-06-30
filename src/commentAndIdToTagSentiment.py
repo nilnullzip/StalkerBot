@@ -20,11 +20,8 @@ def getMaxSentiments(sentimentDict):
     return maxElts
 
 def scrape(userID):
-    try:
-        commentIdStructure = scrape_juan(userID)
-    except ValueError:
-        commentIdStructure = scrape_kevin(userID)
-    return commentIdStructure
+    # Use scrape_kevin since http://api.ihackernews.com/ is not working (6/30/2011)
+    return scrape_kevin(userID)
 
 # commentIdStructure is a list of lists. The inner lists contain a String with a ThreadId
 # and the second element has the corresponding comment
