@@ -15,9 +15,12 @@ os.chdir("../static")
 
 q = os.environ["QUERY_STRING"]
 
+logging = False
+
 import datetime
-LOG = open ("../log.txt", "a")
-LOG.write("[%s] URL: %s\n" % (datetime.datetime.today(), q))
+if logging :
+    LOG = open ("../log.txt", "a")
+    LOG.write("[%s] URL: %s\n" % (datetime.datetime.today(), q))
 
 if (q.startswith("userid=")) :
     print "Content-Type: text/html"
@@ -26,8 +29,11 @@ if (q.startswith("userid=")) :
 
     ignore, userid = q.split('userid=')
 
-    LOG.write("[%s] Stalking: %s\n" % (datetime.datetime.today(), userid))
+    if logging :
+        LOG.write("[%s] Stalking: %s\n" % (datetime.datetime.today(), userid))
     print TS.getUserTopicSentiments(userid)
-    LOG.write("[%s] Done stalking: %s\n" % (datetime.datetime.today(), userid))
+    if logging :
+        LOG.write("[%s] Done stalking: %s\n" % (datetime.datetime.today(), userid))
 
+if logging :
 LOG.close()
