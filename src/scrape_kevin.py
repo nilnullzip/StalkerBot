@@ -1,3 +1,4 @@
+
 import urllib, re, time
 from BeautifulSoup import BeautifulSoup
 
@@ -19,10 +20,8 @@ def scrape(userID):
     allpostID = []
     result = []
     nexturl = 'http://news.ycombinator.com/threads?id=' + userID
-    commentfieldre = re.compile('class="default"><(.*?)></td>', re.DOTALL)
+    commentfieldre = re.compile('<a href="user\?id=' + userID + '">' + userID + '<(.*?)></td>', re.DOTALL)
     commentre = re.compile('class="comment"><font color=.......>(.*?)</fo', re.DOTALL)
-    # Following modified by DAS to prevent matching quote in title
-    #postIDre = re.compile('parent</a> \| on: <a href="item\?id=(.*)"')
     postIDre = re.compile('parent</a> \| on: <a href="item\?id=(.*)">')
     nexturlre = re.compile('class="title"><a href="(.*)" rel')
 
@@ -49,11 +48,10 @@ def scrape(userID):
         # inserted by DAS on 6/27 to prevent overloading the server
         #time.sleep(.05)
     # return first 10 elements for consistency with HN API
-    return result[0:10]
+    return result
     #return result
 
-#print scrape("dstein64")
 #commentIdStructure = scrape("pg")
-#print commentIdStructure
+#for elt in commentIdStructure:
+#    print elt
 #print len(commentIdStructure)
-
