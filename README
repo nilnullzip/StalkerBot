@@ -1,6 +1,9 @@
 StalkerBot: Reveal how a HN user feels based on their comments.
+---------------------------------------------------------------
 
-To run StalkerBot server locally:
+You can run StalkerBot server two ways:
+
+1) Local StalkerBot simple server (prefered mode for debugging):
 
 > cd src
 > python StalkerBot.py
@@ -11,4 +14,13 @@ http://localhost:8000/stalkerbot.html
 
 Not sure if this same link will work under Windows.
 
-Juan
+
+2) Apache StalkerBot server (production server):
+
+* Clone the StalkerBot repository into the Apache htdocs directory.
+* Edit httpd.conf to point DocumentRoot to StalkerBot/static directory.
+* Edit httpd.conf so ScriptAlias /cgi-bin/ points to StalkerBot/cgi.
+
+Make sure you change all the configuration lines relating to DocumentRoot and cgi.
+
+
