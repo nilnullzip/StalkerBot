@@ -17,11 +17,14 @@ q = os.environ["QUERY_STRING"]
 
 logging = True
 
+def log (msg) :
+    if logging :
+        LOG = open ("/tmp/StalkerBot.log", "a")
+        LOG.write(msg)
+        LOG.close()
+    
 import datetime
-if logging :
-    LOG = open ("/tmp/StalkerBot.log", "a")
-    LOG.write("[%s] URL: %s\n" % (datetime.datetime.today(), q))
-    LOG.flush()
+log ("[%s] URL: %s\n" % (datetime.datetime.today(), q))
 
 if (q.startswith("userid=")) :
     print "Content-Type: text/html"
@@ -29,15 +32,6 @@ if (q.startswith("userid=")) :
     print
 
     ignore, userid = q.split('userid=')
-
-    if logging :
-        LOG.write("[%s] Stalking: %s\n" % (datetime.datetime.today(), userid))
-        LOG.flush()
-
+    log("[%s] Stalking: %s\n" % (datetime.datetime.today(), userid))
     print TS.getUserTopicSentiments(userid)
-    if logging :
-        LOG.write("[%s] Done stalking: %s\n" % (datetime.datetime.today(), userid))
-        LOG.flush()
-
-if logging :
-    LOG.close()
+    log("[%s] Done stalking: %s\n" % (datetime.datetime.today(), userid))
