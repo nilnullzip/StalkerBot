@@ -12,7 +12,7 @@ To access StalkerBot web page locally (under OSX) use the following URL:
 
 http://localhost:8000/stalkerbot.html
 
-Not sure if this same link will work under Windows.
+Log output will be written to StalkerBot/StalkerBot.log file.
 
 
 2) Apache StalkerBot server (production server):
@@ -23,4 +23,4 @@ Not sure if this same link will work under Windows.
 
 Make sure you change all the configuration lines relating to DocumentRoot and cgi.
 
-
+Log output will be written to /tmp/StalkerBot.log
