@@ -24,5 +24,3 @@ Log output will be written to StalkerBot/StalkerBot.log file.
 Make sure you change all the configuration lines relating to DocumentRoot and cgi.
 
 Log output will be written to /tmp/StalkerBot.log
-
-X
