@@ -34,14 +34,13 @@ def scrape(userID):
                 commentmatch = commentre.search(currfield)
                 comment = convert(sanitize_html(commentmatch.group(1)))
                 result.append([postID, comment])        
-                nexturlmatch = nexturlre.search(content)
-                if nexturlmatch:
-                    nexturlappend = nexturlmatch.group(1)
-                    nexturl = 'http://news.ycombinator.com/' + nexturlappend[1:]
-                else:
-                    nexturl = []
-                time.sleep(.05)
-    print len(result)
+            nexturlmatch = nexturlre.search(content)
+            if nexturlmatch:
+                nexturlappend = nexturlmatch.group(1)
+                nexturl = 'http://news.ycombinator.com/' + nexturlappend[1:]
+            else:
+                nexturl = []
+            time.sleep(.05)
     return result
 
 
