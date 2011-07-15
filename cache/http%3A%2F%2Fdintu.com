@@ -1,0 +1,1 @@
+["Pharmaceutical drug", "Question", "Tailor", "Headache", "Migraine", "Database", "Prediction", "Track and field", "Short film", "Symptom"]
