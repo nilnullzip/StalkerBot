@@ -103,6 +103,9 @@ def commentAndIdToTagSentiment(commentIdStructure):
                 
     return json.dumps(tagSentUrlComment)
 
+def getUserTopicSentiments(userid):
+    return commentAndIdToTagSentiment(scrape(userid))
+
 #scrape("dstein64")
 #print commentAndIdToTagSentiment(scrape("vijaydev"))
 #print commentAndIdToTagSentiment(scrape("dstein64"))
