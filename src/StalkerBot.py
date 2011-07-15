@@ -59,5 +59,7 @@ Handler = MyHandler
 
 httpd = SocketServer.TCPServer(("", PORT), Handler)
 
-print "serving at port", PORT
+print "Serving at port:", PORT
+print "Use this URL:       http://localhost:%d" % PORT
+print "Or to see raw JSON: http://localhost:%d/cgi-bin/StalkerBotCGI.py?userid=pg" % PORT
 httpd.serve_forever()
