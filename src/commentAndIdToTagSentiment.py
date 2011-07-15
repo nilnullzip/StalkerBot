@@ -108,4 +108,4 @@ def commentAndIdToTagSentiment(commentIdStructure):
 #print commentAndIdToTagSentiment(scrape("dstein64"))
 #print commentAndIdToTagSentiment(scrape("melissamiranda"))
 #print commentAndIdToTagSentiment(scrape("edw519"))
-print commentAndIdToTagSentiment(scrape("pg"))
+#print commentAndIdToTagSentiment(scrape("pg"))
