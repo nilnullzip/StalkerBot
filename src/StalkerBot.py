@@ -4,12 +4,28 @@ import SimpleHTTPServer
 import SocketServer
 import os, sys
 import commentAndIdToTagSentiment as TS
-#from commentAndIdToTagSentiment import commentAndIdToTagSentiment as TS
 
-if (len(sys.argv)!=2):
+from optparse import OptionParser
+
+parser = OptionParser()
+
+parser.add_option("-p", "--port", dest="port", type="int",
+                  help="listen on port", metavar="PORT")
+
+#parser.add_option("-e", "--test-error",
+#                  action="store_true", dest="test-error", default=False,
+#                  help="Pass error condition to HTML")
+
+(options, args) = parser.parse_args()
+
+if args != [] :
+    parser.print_help()
+    sys.exit()
+
+if options.port==None :
     PORT = 8000
 else:
-    PORT = int(sys.argv[1])
+    PORT = options.port
 
 os.chdir("../static")
 
@@ -26,7 +42,8 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def do_GET(s) :
         import datetime
         log("[%s] URL: %s\n" % (datetime.datetime.today(), s.path))
-        if (s.path.startswith("/cgi-bin/StalkerBotCGI.py?userid=")) :
+#        if (s.path.startswith("/cgi-bin/StalkerBotCGI.py?userid=")) :
+        if (s.path.startswith("/cgi-bin/StalkerBotCGI.py?")) :
             s.send_response(200)
             s.send_header("Content-type", "text/html")
             s.end_headers()
