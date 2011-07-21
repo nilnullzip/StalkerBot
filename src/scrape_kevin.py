@@ -23,6 +23,8 @@ def scrape(userID):
     commentre = re.compile('class="comment"><font color=.......>(.*?)</fo', re.DOTALL)
     postIDre = re.compile('<a href="item\?id=(.*)">parent</a> \| on: <a href="item\?id=(\\1)">')
     nexturlre = re.compile('class="title"><a href="(.*)" rel')
+    commentIDre = re.compile('<a href="item\?id=([^>]*)">link</a>')
+
 
     while (nexturl and len(result) < 10):
         content = urllib.urlopen(nexturl).read()
@@ -33,7 +35,9 @@ def scrape(userID):
                 postID = postIDmatch.group(1)
                 commentmatch = commentre.search(currfield)
                 comment = convert(sanitize_html(commentmatch.group(1)))
-                result.append([postID, comment])        
+                commentIDmatch = commentIDre.search(currfield)
+                commentID = commentIDmatch.group(1)
+                result.append([postID, comment, commentID]) 
             nexturlmatch = nexturlre.search(content)
             if nexturlmatch:
                 nexturlappend = nexturlmatch.group(1)
@@ -48,3 +52,4 @@ def scrape(userID):
 #for elt in commentIdStructure:
 #    print elt
 #print len(commentIdStructure)
+#scrape("icey")
