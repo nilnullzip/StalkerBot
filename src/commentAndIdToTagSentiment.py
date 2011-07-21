@@ -9,7 +9,8 @@ from scrape_kevin import scrape as scrape_kevin
 from tag_generation import generateTags
 from effectcheck_api import getSentiment
 
-CACHE_DIRECTORY = "../cache/"
+TAG_CACHE_DIRECTORY = "../cache/tags"
+SENTIMENT_CACHE_DIRECTORY = "../cache/sentiments"
 
 # Takes in a Hacker News Thread ID String
 def hnThreadIdToArticleUrl( threadId ):
@@ -53,11 +54,12 @@ def commentAndIdToTagSentiment(commentIdStructure):
     
     class GetTags ( threading.Thread ):
         # Override Thread's __init__ method to accept the parameters needed:
-        def __init__ ( self, threadId, comment ):
+        def __init__ ( self, threadId, comment, commentId ):
             self.curThreadId = threadId
             self.curThreadUrl = "http://news.ycombinator.com/item?id=" + self.curThreadId
             self.curComment = comment
             self.curArticleUrl = hnThreadIdToArticleUrl(self.curThreadId)
+            self.curCommentId = commentId
             threading.Thread.__init__ ( self )
     
         def run ( self ):
@@ -65,21 +67,18 @@ def commentAndIdToTagSentiment(commentIdStructure):
                 # No need to generate the same tags over and over
                 if (not (threadId in threadTagsChecked)):
                     threadTagsChecked.append(self.curThreadId)
-                    # Truncate URL to 200 characters to avoid file errors
-                    cacheFileStr = CACHE_DIRECTORY + urllib.quote(self.curArticleUrl,'')[0:200]
-                    if (os.path.isfile(cacheFileStr)):
-                        cache = open(cacheFileStr, "r")
+                    tagCacheFileStr = TAG_CACHE_DIRECTORY + "/" + urllib.quote(self.curThreadId,'')
+                    if (os.path.isfile(tagCacheFileStr)):
+                        cache = open(tagCacheFileStr, "r")
                         threadTags[self.curThreadId] = json.loads(cache.read())
                     else:
                         # Sleep before call in case hacker news was called prior
                         time.sleep(.05)
                         threadTags[self.curThreadId] = generateTags(self.curArticleUrl)
                         # Cache article tags
-                        cache = open(cacheFileStr, "w")
+                        cache = open(tagCacheFileStr, "w")
                         cache.write(json.dumps(threadTags[self.curThreadId]))
-                            
                     cache.close()
-
                 else:
                     # Wait until the tags are added for the threadId by some other thread call
                     while (not (self.curThreadId in threadTags)):
@@ -87,8 +86,17 @@ def commentAndIdToTagSentiment(commentIdStructure):
                     
                 tags = threadTags[self.curThreadId]
                 
-                sentiment = getSentiment(self.curComment)
-                maxSentiments = getMaxSentiments(sentiment)
+                sentCacheFileStr = SENTIMENT_CACHE_DIRECTORY + "/" + urllib.quote(self.curCommentId,'')
+                if (os.path.isfile(sentCacheFileStr)):
+                    cache = open(sentCacheFileStr, "r")
+                    maxSentiments = json.loads(cache.read())
+                else:
+                    sentiment = getSentiment(self.curComment)
+                    maxSentiments = getMaxSentiments(sentiment)
+                    # Cache max sentiments
+                    cache = open(sentCacheFileStr, "w")
+                    cache.write(json.dumps(maxSentiments))
+                
                 for tag in tags:
                     structForJS = [tag, maxSentiments, self.curComment, self.curThreadUrl, self.curArticleUrl]
                     tagSentUrlComment.append(structForJS)
@@ -96,7 +104,8 @@ def commentAndIdToTagSentiment(commentIdStructure):
     for commentIdElt in commentIdStructure:
         threadId = commentIdElt[0]
         comment = commentIdElt[1]
-        GetTags ( threadId, comment ).start()
+        commentId = commentIdElt[2]
+        GetTags ( threadId, comment, commentId ).start()
                 
     while (threading.active_count() > 1):
         pass
@@ -108,7 +117,7 @@ def getUserTopicSentiments(userid):
 
 #scrape("dstein64")
 #print commentAndIdToTagSentiment(scrape("vijaydev"))
-#print commentAndIdToTagSentiment(scrape("dstein64"))
+#print scrape("dstein64")
 #print commentAndIdToTagSentiment(scrape("melissamiranda"))
 #print commentAndIdToTagSentiment(scrape("edw519"))
 #print commentAndIdToTagSentiment(scrape("pg"))
