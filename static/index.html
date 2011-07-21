@@ -58,6 +58,8 @@
                             // element has format ['tag', ['sentiment1'(,'sentiment2',...)]]
                             tag = element[0];
                             sentimentList = element[1];
+                            commentText = element[2];
+                            articleLink = element[4];
                             console.log(element, tag, sentimentList);
 
                             $.each(sentimentList, function(index, sentiment) {
@@ -73,7 +75,7 @@
                                     blockCount = 0;
                                 }
 
-                                var li = $('<li class="object"><div class="tag">' + tag + '</div><img src="img/' + sentimentAdj[sentiment] + '.png" alt="sentiment"/><div class="sentiment">' + sentimentAdj[sentiment] + '</div></li>');
+                                var li = $('<li class="object"><div class="tag">' + tag + '</div><a href="' + articleLink + '" title="' + commentText + '"><img src="img/' + sentimentAdj[sentiment] + '.png" alt="sentiment"/></a><div class="sentiment">' + sentimentAdj[sentiment] + '</div></li>');
                                 console.log(li.val());
                                 $('#topic').append(li);
                                 blockCount++;
