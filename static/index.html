@@ -45,6 +45,16 @@
                 var url = "/cgi-bin/StalkerBotCGI.py";
 
                 console.log(val);
+                
+				function htmlEncode(str)
+				{
+					str = str.replace(/&/g, "&amp;");
+					str = str.replace(/>/g, "&gt;");
+					str = str.replace(/</g, "&lt;");
+					str = str.replace(/"/g, "&quot;");
+					str = str.replace(/'/g, "&#039;");
+					return str;
+				}
 
                 $.ajax({
                     url: url,
@@ -58,7 +68,7 @@
                             // element has format ['tag', ['sentiment1'(,'sentiment2',...)]]
                             tag = element[0];
                             sentimentList = element[1];
-                            commentText = element[2];
+                            commentText = htmlEncode(element[2]);
                             commentLink = element[3];
                             articleLink = element[4];
                             console.log(element, tag, sentimentList);
