@@ -42,7 +42,7 @@ def scrape(userID):
             commentIDmatch = commentIDre.search(currfield)
             if commentIDmatch:
                 commentID = commentIDmatch.group(1)
-            if (postID and comment and commentID)
+            if (postID and comment and commentID):
                 result.append([postID, comment, commentID]) 
         nexturlmatch = nexturlre.search(content)
         if nexturlmatch:
