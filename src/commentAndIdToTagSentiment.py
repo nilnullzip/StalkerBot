@@ -114,9 +114,11 @@ def commentAndIdToTagSentiment(commentIdStructure):
                 cache.write(json.dumps(maxSentiments))
             cache.close()
             
-            for tag in tags:
-                structForJS = [tag, maxSentiments, self.curComment, self.curThreadUrl, self.curArticleUrl]
-                tagSentUrlComment.append(structForJS)
+#            for tag in tags:
+#                structForJS = [tag, maxSentiments, self.curComment, self.curThreadUrl, self.curArticleUrl]
+#                tagSentUrlComment.append(structForJS)
+            structForJS = [tags, maxSentiments, self.curComment, self.curThreadUrl, self.curArticleUrl]
+            tagSentUrlComment.append(structForJS)
     
     threadList = []
     threadIdLocks = {}
