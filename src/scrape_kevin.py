@@ -30,21 +30,27 @@ def scrape(userID):
         content = urllib.urlopen(nexturl).read()
         allcommentfield = commentfieldre.findall(content)
         for currfield in allcommentfield:
+            postID = []
+            comment = []
+            commentID = []
             postIDmatch = postIDre.search(currfield)
             if postIDmatch:
                 postID = postIDmatch.group(1)
-                commentmatch = commentre.search(currfield)
+            commentmatch = commentre.search(currfield)
+            if commentmatch:
                 comment = convert(sanitize_html(commentmatch.group(1)))
-                commentIDmatch = commentIDre.search(currfield)
+            commentIDmatch = commentIDre.search(currfield)
+            if commentIDmatch:
                 commentID = commentIDmatch.group(1)
+            if (postID and comment and commentID)
                 result.append([postID, comment, commentID]) 
-            nexturlmatch = nexturlre.search(content)
-            if nexturlmatch:
-                nexturlappend = nexturlmatch.group(1)
-                nexturl = 'http://news.ycombinator.com/' + nexturlappend[1:]
-            else:
-                nexturl = []
-            time.sleep(.05)
+        nexturlmatch = nexturlre.search(content)
+        if nexturlmatch:
+            nexturlappend = nexturlmatch.group(1)
+            nexturl = 'http://news.ycombinator.com/' + nexturlappend[1:]
+        else:
+            nexturl = []
+        time.sleep(.05)
     return result
 
 
