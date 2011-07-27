@@ -1,119 +1,41 @@
-	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-	<head>
-	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <title>Stalkerbot</title>
-        <link href="screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
-        <link href="jquery.bt.css" rel="stylesheet" type="text/css" />
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="jquery.bt.js" type="text/javascript" charset="utf-8"></script>
-    </head>
-    <body>
-        <div id="wrapper">
-            <div id="header">
-                <img src="img/stalkerbot.png" alt="stalkerbot" />
-                <span>stalkerbot</span>
-                <p>
-                    Reveal how a HN user feels
-                    based on their comments
-                </p>
-            </div>
-            <form id="st_form" action="stalkerbot_submit" method="get" accept-charset="utf-8">
-                <input id="st_input" type="text" placeholder="Hacker News Name">
-                <input type="submit" value="Submit">
-            </form>
-            <div id="results">
-                <ul id="topic">
-                    <!--<li>-->
-                        <!--<div class="tag">javascript</div>-->
-                        <!--<img src="img/anxious.png" alt="anxious" />-->
-                        <!--<div class="sentiment">Anxious</div>-->
-                    <!--</li>-->
-                </ul>
-            </div>
-        </div>
-        <div style="text-align: center; display:none;" id="loading">
-            <p style="margin-bottom:10px;">Stalking... This will take a minute.</p>
-            <img src="img/ajax-loader.gif" alt="loading">
-        </div>
-        <script type="text/javascript" charset="utf-8">
-            $('#st_form').submit(function(e) {
-                e.preventDefault();
-                $('#loading').show();
-
-                $('#topic').empty();
-                var val = $("#st_input", this).val();
-<!--                 var url = '/stalk'; -->
-                var url = "/cgi-bin/StalkerBotCGI.py";
-
-                console.log(val);
-                
-                function htmlEncode(str)
-                {
-                    str = str.replace(/&/g, "&amp;");
-                    str = str.replace(/>/g, "&gt;");
-                    str = str.replace(/</g, "&lt;");
-                    str = str.replace(/"/g, "&quot;");
-                    str = str.replace(/'/g, "&#039;");
-                    return str;
-                }
-
-                $.ajax({
-                    url: url,
-                    dataType: 'json',
-                    data:{ userid:val},
-                    success:function(data) {
-                        console.log(data);
-                        var blockCount = 0;
-
-                        $.each(data, function(index, element) {
-                            // element has format ['tag', ['sentiment1'(,'sentiment2',...)]]
-                            tag = element[0];
-                            sentimentList = element[1];
-                            commentText = htmlEncode(element[2]);
-                            commentLink = element[3];
-                            articleLink = element[4];
-                            console.log(element, tag, sentimentList);
-
-                            $.each(sentimentList, function(index, sentiment) {
-                                sentimentAdj = {"Confidence" : "confident",
-                                "Anxiety"    : "anxious",
-                                "Compassion" : "compassionate",
-                                "Hostility"  : "hostile",
-                                "Depression" : "depressed",
-                                "Happiness"  : "happy"};
-
-                                if (blockCount >= 5) {
-                                    $('#topic').append('<br/><br/>');
-                                    blockCount = 0;
-                                }
-
-                                var li = $('<li class="object"><div class="tag">' + tag + '</div><a href="' + commentLink + '" class="hn_link" title="' + commentText + '"><img src="img/' + sentimentAdj[sentiment] + '.png" alt="sentiment"/></a><div class="sentiment">' + sentimentAdj[sentiment] + '</div></li>');
-                                console.log(li.val());
-                                $('#topic').append(li);
-                                blockCount++;
-                            });
-                        });
-                        $('.hn_link').bt({
-                            padding: 20,
-                            width: 275,
-                            spikeLength: 20,
-                            spikeGirth: 20,
-                            cornerRadius: 20,
-                            fill: 'rgba(0, 0, 0, .8)',
-                            strokeWidth: 3,
-                            strokeStyle: '#ef4136',
-                            cssStyles: {color: '#FFF'},
-                            positions: ['right', 'left']
-                        });
-                    },
-                    complete: function() {
-                        $('#loading').hide();
-                    }
-                });
-            });
-
-        </script>
-    
-    </body>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	  "http://www.w3.org/TR/html4/loose.dtd">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>Stalkerbot</title>
+  <link href="screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <link href="jquery.bt.css" rel="stylesheet" type="text/css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="jquery.bt.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+  <div id="wrapper">
+    <div id="header">
+      <img src="img/stalkerbot.png" alt="stalkerbot" />
+      <span>stalkerbot</span>
+      <p>
+        Reveal how a HN user feels
+        based on their comments
+      </p>
+    </div>
+    <form id="st_form" action="stalkerbot_submit" method="get" accept-charset="utf-8">
+      <input id="st_input" type="text" placeholder="Hacker News Name">
+      <input type="submit" value="Submit">
+    </form>
+    <div id="results">
+      <ul id="topic">
+        <!--<li>-->
+        <!--<div class="tag">javascript</div>-->
+        <!--<img src="img/anxious.png" alt="anxious" />-->
+        <!--<div class="sentiment">Anxious</div>-->
+        <!--</li>-->
+      </ul>
+    </div>
+  </div>
+  <div style="text-align: center; display:none;" id="loading">
+    <p style="margin-bottom:10px;">Stalking... This will take a minute.</p>
+    <img src="img/ajax-loader.gif" alt="loading">
+  </div>
+  <script src="logic.js" type="text/javascript" charset="utf-8"></script>
+</body>
 
