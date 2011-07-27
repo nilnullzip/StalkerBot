@@ -28,7 +28,12 @@ $('#st_form').submit(function(e) {
 
             $.each(data, function(index, element) {
                 // element has format ['tag', ['sentiment1'(,'sentiment2',...)]]
+                var tags = "";
 		$.each(element[0], function(index, tag) {
+                     if (index != 0) tags = tags + ", ";
+                     tags = tags + tag;
+                });
+                    tag = element[0][0]
                     // tag = element[0];
                     sentimentList = element[1];
                     commentText = htmlEncode(element[2]);
@@ -49,8 +54,8 @@ $('#st_form').submit(function(e) {
                            blockCount = 0;
 			}
 
-//			var li = $('<li class="object"><a href="' + articleLink + '" style="text-decoration:none" class="hn_link" title="' + element[0] + '"><div class="tag">'
-			var li = $('<li class="object"><a href="' + articleLink + '" style="text-decoration:none"><div class="tag">'
+			var li = $('<li class="object"><a href="' + articleLink + '" style="text-decoration:none" class="hn_link" title="' + tags + '"><div class="tag">'
+//			var li = $('<li class="object"><a href="' + articleLink + '" style="text-decoration:none"><div class="tag">'
                             + tag + '</div></a>'
 			    + '<a href="' + commentLink + '" class="hn_link" title="' + commentText + '"><img src="img/'
 			    + sentimentAdj[sentiment] + '.png" alt="sentiment"/></a><div class="sentiment">'
@@ -59,7 +64,6 @@ $('#st_form').submit(function(e) {
 			$('#topic').append(li);
 			blockCount++;
                     });
-                });
                 $('#topic').append('<br/><br/>');
                 $('#topic').append('<br/><br/>');
                 blockCount = 0;
