@@ -46,10 +46,12 @@ $('#st_form').submit(function(e) {
 
 			if (blockCount >= 5) {
                             $('#topic').append('<br/><br/>');
-                            blockCount = 0;
+                           blockCount = 0;
 			}
 
-			var li = $('<li class="object"><a href="' + articleLink + '"><div class="tag">' + tag + '</div></a>'
+//			var li = $('<li class="object"><a href="' + articleLink + '" style="text-decoration:none" class="hn_link" title="' + element[0] + '"><div class="tag">'
+			var li = $('<li class="object"><a href="' + articleLink + '" style="text-decoration:none"><div class="tag">'
+                            + tag + '</div></a>'
 			    + '<a href="' + commentLink + '" class="hn_link" title="' + commentText + '"><img src="img/'
 			    + sentimentAdj[sentiment] + '.png" alt="sentiment"/></a><div class="sentiment">'
 			    + sentimentAdj[sentiment] + '</div></li>');
@@ -58,6 +60,9 @@ $('#st_form').submit(function(e) {
 			blockCount++;
                     });
                 });
+                $('#topic').append('<br/><br/>');
+                $('#topic').append('<br/><br/>');
+                blockCount = 0;
             });
             $('.hn_link').bt({
                 padding: 20,
