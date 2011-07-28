@@ -50,8 +50,7 @@ $('#st_form').submit(function(e) {
                 $('#topic').append(''
 				   + '<a href="' + articleLink + '" style="text-decoration:none" class="article_link" title="' + tags + '">'
 				   + articleTitle
-				   + '</a>'
-				   + '<br/>' );
+				   + '</a>' );
 		
 		// Once around for each sentiment
 
@@ -81,8 +80,7 @@ $('#st_form').submit(function(e) {
 		    $('#topic').append(li);
 		    blockCount++;
                 });
-                $('#topic').append('<br/><br/>');
-                $('#topic').append('<br/><br/>');
+                $('#topic').append('<br/><br/><br/>');
                 blockCount = 0;
             });
             $('.hn_link').bt({
