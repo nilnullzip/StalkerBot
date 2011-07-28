@@ -39,6 +39,7 @@ $('#st_form').submit(function(e) {
                     commentText = htmlEncode(element[2]);
                     commentLink = element[3];
                     articleLink = element[4];
+                    articleTitle = htmlEncode(element[5]);
                     console.log(element, tag, sentimentList);
 
                     $.each(sentimentList, function(index, sentiment) {
@@ -54,9 +55,9 @@ $('#st_form').submit(function(e) {
                            blockCount = 0;
 			}
 
-			var li = $('<li class="object"><a href="' + articleLink + '" style="text-decoration:none" class="article_link" title="' + tags + '"><div class="tag">'
+			var li = $('<li class="object"><a href="' + articleLink + '" style="text-decoration:none" class="article_link" title="' + tags + '"><div class="title">'
 //			var li = $('<li class="object"><a href="' + articleLink + '" style="text-decoration:none"><div class="tag">'
-                            + tag + '</div></a>'
+                            + articleTitle + '</div></a>'
 			    + '<a href="' + commentLink + '" class="hn_link" title="' + commentText + '"><img src="img/'
 			    + sentimentAdj[sentiment] + '.png" alt="sentiment"/></a><div class="sentiment">'
 			    + sentimentAdj[sentiment] + '</div></li>');
@@ -67,6 +68,9 @@ $('#st_form').submit(function(e) {
                 $('#topic').append('<br/><br/>');
                 $('#topic').append('<br/><br/>');
                 blockCount = 0;
+            });
+            $(document).ready(function(){
+            $(".tag").ellipsis();
             });
             $('.hn_link').bt({
                 padding: 20,
@@ -81,7 +85,7 @@ $('#st_form').submit(function(e) {
                 positions: ['right', 'left']
             });
             $('.article_link').bt({
-                padding: 20,
+                padding: 15,
                 width: 325,
                 spikeLength: 0,
                 spikeGirth: 0,

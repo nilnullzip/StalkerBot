@@ -3,7 +3,7 @@
 import json, threading, time, datetime, urllib, re, os, tempfile
 
 from scrape_kevin import scrape as scrape_kevin
-from tag_generation import generateTags
+from tag_generation import articleApiRequest
 from effectcheck_api import getSentiment
 
 # Determines whether caching is on or off
@@ -97,17 +97,21 @@ def commentAndIdToTagSentiment(commentIdStructure):
                             ensure_dir(tagCacheFileStr)
                         if (CACHE_ON and os.path.isfile(tagCacheFileStr)):
                             cache = open(tagCacheFileStr, "r")
-                            threadTags[self.curThreadId] = json.loads(cache.read())
+                            apiResponseFromCache = json.loads(cache.read())
+                            threadTags[self.curThreadId] = apiResponseFromCache['tags']
+                            self.curArticleTitle = apiResponseFromCache['title']
                         else:
                             # Sleep before call in case hacker news was called prior
                             time.sleep(.05)
-                            threadTags[self.curThreadId] = generateTags(self.curArticleUrl)
+                            apiResponse = articleApiRequest(self.curArticleUrl)
+                            threadTags[self.curThreadId] = apiResponse['tags']
+                            self.curArticleTitle = apiResponse['title']
                             if (CACHE_ON):
                                 # Cache article tags
                                 cache = open(tagCacheFileStr, "w")
                             else:
                                 cache = tempfile.TemporaryFile()
-                            cache.write(json.dumps(threadTags[self.curThreadId]))
+                            cache.write(json.dumps(apiResponse))
                         cache.close()
             
             tags = threadTags[self.curThreadId]
@@ -132,7 +136,7 @@ def commentAndIdToTagSentiment(commentIdStructure):
 #            for tag in tags:
 #                structForJS = [tag, maxSentiments, self.curComment, self.curThreadUrl, self.curArticleUrl]
 #                tagSentUrlComment.append(structForJS)
-            structForJS = [tags, maxSentiments, self.curComment, self.curThreadUrl, self.curArticleUrl]
+            structForJS = [tags, maxSentiments, self.curComment, self.curThreadUrl, self.curArticleUrl, self.curArticleTitle]
             tagSentUrlComment.append(structForJS)
     
     threadList = []
