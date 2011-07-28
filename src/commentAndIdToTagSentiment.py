@@ -9,7 +9,7 @@ from effectcheck_api import getSentiment
 # Determines whether caching is on or off
 CACHE_ON = True
 
-TAG_CACHE_DIRECTORY = "../cache/tags"
+DIFFBOT_API_CACHE_DIRECTORY = "../cache/diffbot-api"
 SENTIMENT_CACHE_DIRECTORY = "../cache/sentiments"
 ARTICLE_URL_CACHE_DIRECTORY = "../cache/article-urls"
 SCRAPED_COMMENTS_CACHE_DIRECTORY = "../cache/scraped-comment-data"
@@ -92,7 +92,7 @@ def commentAndIdToTagSentiment(commentIdStructure):
                 else:
                     if (not (self.curThreadId in threadTagsChecked)):
                         threadTagsChecked.append(self.curThreadId)
-                        tagCacheFileStr = TAG_CACHE_DIRECTORY + "/" + self.curThreadId
+                        tagCacheFileStr = DIFFBOT_API_CACHE_DIRECTORY + "/" + self.curThreadId
                         if (CACHE_ON):
                             ensure_dir(tagCacheFileStr)
                         if (CACHE_ON and os.path.isfile(tagCacheFileStr)):
