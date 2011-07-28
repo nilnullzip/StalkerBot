@@ -70,7 +70,7 @@ $('#st_form').submit(function(e) {
                 blockCount = 0;
             });
             $(document).ready(function(){
-            $(".tag").ellipsis();
+            $(".title").ellipsis();
             });
             $('.hn_link').bt({
                 padding: 20,

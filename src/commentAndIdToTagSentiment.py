@@ -98,14 +98,26 @@ def commentAndIdToTagSentiment(commentIdStructure):
                         if (CACHE_ON and os.path.isfile(tagCacheFileStr)):
                             cache = open(tagCacheFileStr, "r")
                             apiResponseFromCache = json.loads(cache.read())
-                            threadTags[self.curThreadId] = apiResponseFromCache['tags']
-                            self.curArticleTitle = apiResponseFromCache['title']
+                            if ('tags' in apiResponseFromCache):
+                                threadTags[self.curThreadId] = apiResponseFromCache['tags']
+                            else:
+                                threadTags[self.curThreadId] = None
+                            if ('title' in apiResponseFromCache):
+                                self.curArticleTitle = apiResponseFromCache['title']
+                            else:
+                                self.curArticleTitle = None
                         else:
                             # Sleep before call in case hacker news was called prior
                             time.sleep(.05)
                             apiResponse = articleApiRequest(self.curArticleUrl)
-                            threadTags[self.curThreadId] = apiResponse['tags']
-                            self.curArticleTitle = apiResponse['title']
+                            if ('tags' in apiResponse):
+                                threadTags[self.curThreadId] = apiResponse['tags']
+                            else:
+                                threadTags[self.curThreadId] = None
+                            if ('title' in apiResponse):
+                                self.curArticleTitle = apiResponse['title']
+                            else:
+                                self.curArticleTitle = None
                             if (CACHE_ON):
                                 # Cache article tags
                                 cache = open(tagCacheFileStr, "w")
@@ -114,7 +126,8 @@ def commentAndIdToTagSentiment(commentIdStructure):
                             cache.write(json.dumps(apiResponse))
                         cache.close()
             
-            tags = threadTags[self.curThreadId]
+            if (self.curThreadId in threadTags):
+                tags = threadTags[self.curThreadId]
             
             sentCacheFileStr = SENTIMENT_CACHE_DIRECTORY + "/" + self.curCommentId
             if (CACHE_ON):
@@ -137,7 +150,8 @@ def commentAndIdToTagSentiment(commentIdStructure):
 #                structForJS = [tag, maxSentiments, self.curComment, self.curThreadUrl, self.curArticleUrl]
 #                tagSentUrlComment.append(structForJS)
             structForJS = [tags, maxSentiments, self.curComment, self.curThreadUrl, self.curArticleUrl, self.curArticleTitle]
-            tagSentUrlComment.append(structForJS)
+            if (not (None in structForJS)):
+                tagSentUrlComment.append(structForJS)
     
     threadList = []
     threadIdLocks = {}
