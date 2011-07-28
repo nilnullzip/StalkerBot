@@ -1,118 +1,118 @@
 $('#st_form').submit(function(e) {
-    e.preventDefault();
-    $('#loading').show();
-    
-    $('#topic').empty();
-    var val = $("#st_input", this).val();
-    var url = "/cgi-bin/StalkerBotCGI.py";
-    
-    logging = false;
+	e.preventDefault();
+	$('#loading').show();
 
-    if (logging) console.log(val);
-                
-    function htmlEncode(str)
-    {
-        str = str.replace(/&/g, "&amp;");
-        str = str.replace(/>/g, "&gt;");
-        str = str.replace(/</g, "&lt;");
-        str = str.replace(/"/g, "&quot;");
-        str = str.replace(/'/g, "&#039;");
-        return str;
-    }
+	$('#topic').empty();
+	var val = $("#st_input", this).val();
+	var url = "/cgi-bin/StalkerBotCGI.py";
 
-    $.ajax({
-        url: url,
-        dataType: 'json',
-        data:{ userid:val},
-        success:function(data) {
-            if (logging) console.log(data);
-            var blockCount = 0;
+	console.log(val);
 
-            // Once around for each article/comment
+	function htmlEncode(str)
+	{
+		str = str.replace(/&/g, "&amp;");
+		str = str.replace(/>/g, "&gt;");
+		str = str.replace(/</g, "&lt;");
+		str = str.replace(/"/g, "&quot;");
+		str = str.replace(/'/g, "&#039;");
+		return str;
+	}
 
-            $.each(data, function(index, element) {
-                // element has format ['tag', ['sentiment1'(,'sentiment2',...)]]
-  
-                tag = element[0][0];
-                sentimentList = element[1];
-                commentText = htmlEncode(element[2]);
-                commentLink = element[3];
-                articleLink = element[4];
-                articleTitle = htmlEncode(element[5]);
-                if (logging) console.log(element, tag, sentimentList);
+	$.ajax({
+		url: url,
+		dataType: 'json',
+		data:{ userid:val},
+		success:function(data) {
+			console.log(data);
+			var blockCount = 0;
 
-		var tags = "";
-		$.each(element[0], function(index, tag) {
-                    if (index != 0) tags = tags + ", ";
-                    tags = tags + tag;
-                });
+			// Once around for each article/comment
 
-		// Append article title
+			$.each(data, function(index, element) {
+				// element has format ['tag', ['sentiment1'(,'sentiment2',...)]]
 
-                $('#topic').append(''
-				   + '<a href="' + articleLink + '" style="text-decoration:none" class="article_link" title="' + tags + '">'
-				   + articleTitle
-				   + '</a>' );
-		
-		// Once around for each sentiment
+				tag = element[0][0];
+				sentimentList = element[1];
+				commentText = htmlEncode(element[2]);
+				commentLink = element[3];
+				articleLink = element[4];
+				articleTitle = htmlEncode(element[5]);
+				commentId = element[6];
+				console.log(element, tag, sentimentList);
 
-                $.each(sentimentList, function(index, sentiment) {
-		    sentimentAdj = {"Confidence" : "confident",
-				    "Anxiety"    : "anxious",
-				    "Compassion" : "compassionate",
-				    "Hostility"  : "hostile",
-				    "Depression" : "depressed",
-				    "Happiness"  : "happy"};
+				var tags = "";
+				$.each(element[0], function(index, tag) {
+					if (index != 0) tags = tags + ", ";
+					tags = tags + tag;
+				});
 
-		    if (blockCount >= 5) {
-                        $('#topic').append('<br/><br/>');
-                        blockCount = 0;
-		    }
+				// Append article title
 
-		    // Append sentiment icon
+				$('#topic').append(''
+						+ '<a href="' + articleLink + '" style="text-decoration:none" class="article_link" title="' + tags + '">'
+						+ articleTitle
+						+ '</a>' );
 
-		    var li = $('<li class="object">'
-			+ '<a href="' + commentLink + '" class="hn_link" title="' + commentText + '">'
-			+ '<img src="img/' + sentimentAdj[sentiment] + '.png" alt="sentiment"/>'
-			+ '</a>'
-			+ '<div class="sentiment">' + sentimentAdj[sentiment] + '</div>'
-			+ '</li>');
+				// Once around for each sentiment
 
-		    if (logging) console.log(li.val());
-		    $('#topic').append(li);
-		    blockCount++;
-                });
-                $('#topic').append('<br/><br/><br/>');
-                blockCount = 0;
-            });
-            $('.hn_link').bt({
-                padding: 20,
-                width: 275,
-                spikeLength: 20,
-                spikeGirth: 20,
-                cornerRadius: 20,
-                fill: 'rgba(0, 0, 0, .8)',
-                strokeWidth: 3,
-                strokeStyle: '#ef4136',
-                cssStyles: {color: '#FFF'},
-                positions: ['right', 'left']
-            });
-            $('.article_link').bt({
-                padding: 15,
-                width: 325,
-                spikeLength: 0,
-                spikeGirth: 0,
-                cornerRadius: 20,
-                fill: 'rgba(0, 0, 0, .8)',
-                strokeWidth: 3,
-                strokeStyle: '#ef4136',
-                cssStyles: {color: '#FFF', fontWeight: 'bold'},
-                positions: ['top']
-            });
-        },
-        complete: function() {
-            $('#loading').hide();
-        }
-    });
+				$.each(sentimentList, function(index, sentiment) {
+					sentimentAdj = {"Confidence" : "confident",
+							"Anxiety"    : "anxious",
+							"Compassion" : "compassionate",
+							"Hostility"  : "hostile",
+							"Depression" : "depressed",
+							"Happiness"  : "happy"};
+
+					if (blockCount >= 5) {
+						$('#topic').append('<br/><br/>');
+						blockCount = 0;
+					}
+
+					// Append sentiment icon
+
+					var li = $('<li class="object ' + commentId + '">'
+							+ '<img src="img/' + sentimentAdj[sentiment] + '.png" alt="sentiment"/>'
+							+ '<div class="sentiment">' + sentimentAdj[sentiment] + '</div>'
+							+ '</li>');
+
+					console.log(li.val());
+					$('#topic').append(li);
+					blockCount++;
+				});
+				
+				$('.' + commentId).wrapAll('<a href="' + commentLink + '" class="hn_link" title="' + commentText + '"/>');
+				
+				$('#topic').append('<br/><br/>');
+				blockCount = 0;
+			});
+			$('.hn_link').bt({
+				padding: 20,
+				width: 275,
+				spikeLength: 20,
+				spikeGirth: 20,
+				cornerRadius: 20,
+				fill: 'rgba(0, 0, 0, .8)',
+				strokeWidth: 3,
+				strokeStyle: '#ef4136',
+				cssStyles: {color: '#FFF'},
+				positions: ['most']
+			});
+			$('.article_link').bt({
+				padding: 15,
+				width: 325,
+				spikeLength: 0,
+				spikeGirth: 0,
+				cornerRadius: 20,
+				fill: 'rgba(0, 0, 0, .8)',
+				strokeWidth: 3,
+				strokeStyle: '#ef4136',
+				cssStyles: {color: '#FFF', fontWeight: 'bold'},
+				positions: ['top', 'bottom']
+			});
+		},
+		complete: function() {
+			$('#loading').hide();
+		}
+	});
 });
 
