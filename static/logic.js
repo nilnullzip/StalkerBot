@@ -105,7 +105,7 @@ $('#st_form').submit(function(e) {
                 strokeWidth: 3,
                 strokeStyle: '#ef4136',
                 cssStyles: {color: '#FFF', fontWeight: 'bold'},
-                positions: ['top']
+                positions: ['top', 'bottom']
             });
         },
         complete: function() {
