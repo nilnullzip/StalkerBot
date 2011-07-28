@@ -51,7 +51,7 @@ $('#st_form').submit(function(e) {
 				   + '<a href="' + articleLink + '" style="text-decoration:none" class="article_link" title="' + tags + '">'
 				   + articleTitle
 				   + '</a>'
-				   +'<br/><br/>' );
+				   + '<br/>' );
 		
 		// Once around for each sentiment
 
