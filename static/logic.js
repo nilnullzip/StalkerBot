@@ -26,51 +26,67 @@ $('#st_form').submit(function(e) {
             console.log(data);
             var blockCount = 0;
 
+            // Once around for each article/comment
+
             $.each(data, function(index, element) {
                 // element has format ['tag', ['sentiment1'(,'sentiment2',...)]]
-                var tags = "";
+  
+                tag = element[0][0];
+                sentimentList = element[1];
+                commentText = htmlEncode(element[2]);
+                commentLink = element[3];
+                articleLink = element[4];
+                articleTitle = htmlEncode(element[5]);
+                console.log(element, tag, sentimentList);
+
+		var tags = "";
 		$.each(element[0], function(index, tag) {
-                     if (index != 0) tags = tags + ", ";
-                     tags = tags + tag;
+                    if (index != 0) tags = tags + ", ";
+                    tags = tags + tag;
                 });
-                    tag = element[0][0]
-                    // tag = element[0];
-                    sentimentList = element[1];
-                    commentText = htmlEncode(element[2]);
-                    commentLink = element[3];
-                    articleLink = element[4];
-                    articleTitle = htmlEncode(element[5]);
-                    console.log(element, tag, sentimentList);
 
-                    $.each(sentimentList, function(index, sentiment) {
-			sentimentAdj = {"Confidence" : "confident",
-					"Anxiety"    : "anxious",
-					"Compassion" : "compassionate",
-					"Hostility"  : "hostile",
-					"Depression" : "depressed",
-					"Happiness"  : "happy"};
+		// Append article title
 
-			if (blockCount >= 5) {
-                            $('#topic').append('<br/><br/>');
-                           blockCount = 0;
-			}
+                $('#topic').append(''
+				   + '<a href="' + articleLink + '" style="text-decoration:none" class="article_link" title="' + tags + '">'
+				   + articleTitle
+				   + '</a>'
+				   +'<br/><br/>' );
+		
+		// Once around for each sentiment
 
-			var li = $('<li class="object"><a href="' + articleLink + '" style="text-decoration:none" class="article_link" title="' + tags + '"><div class="title">'
-//			var li = $('<li class="object"><a href="' + articleLink + '" style="text-decoration:none"><div class="tag">'
-                            + articleTitle + '</div></a>'
-			    + '<a href="' + commentLink + '" class="hn_link" title="' + commentText + '"><img src="img/'
-			    + sentimentAdj[sentiment] + '.png" alt="sentiment"/></a><div class="sentiment">'
-			    + sentimentAdj[sentiment] + '</div></li>');
-			console.log(li.val());
-			$('#topic').append(li);
-			blockCount++;
-                    });
+                $.each(sentimentList, function(index, sentiment) {
+		    sentimentAdj = {"Confidence" : "confident",
+				    "Anxiety"    : "anxious",
+				    "Compassion" : "compassionate",
+				    "Hostility"  : "hostile",
+				    "Depression" : "depressed",
+				    "Happiness"  : "happy"};
+
+		    if (blockCount >= 5) {
+                        $('#topic').append('<br/><br/>');
+                        blockCount = 0;
+		    }
+
+		    // Append sentiment icon
+
+		    var li = $('<li class="object">'
+			+ '<a href="' + commentLink + '" class="hn_link" title="' + commentText + '">'
+			+ '<img src="img/' + sentimentAdj[sentiment] + '.png" alt="sentiment"/>'
+			+ '</a>'
+			+ '<div class="sentiment">' + sentimentAdj[sentiment] + '</div>'
+			+ '</li>');
+
+		    console.log(li.val());
+		    $('#topic').append(li);
+		    blockCount++;
+                });
                 $('#topic').append('<br/><br/>');
                 $('#topic').append('<br/><br/>');
                 blockCount = 0;
             });
             $(document).ready(function(){
-            $(".title").ellipsis();
+		$(".title").ellipsis();
             });
             $('.hn_link').bt({
                 padding: 20,
