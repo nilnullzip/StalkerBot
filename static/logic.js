@@ -54,7 +54,7 @@ $('#st_form').submit(function(e) {
                            blockCount = 0;
 			}
 
-			var li = $('<li class="object"><a href="' + articleLink + '" style="text-decoration:none" class="hn_link" title="' + tags + '"><div class="tag">'
+			var li = $('<li class="object"><a href="' + articleLink + '" style="text-decoration:none" class="article_link" title="' + tags + '"><div class="tag">'
 //			var li = $('<li class="object"><a href="' + articleLink + '" style="text-decoration:none"><div class="tag">'
                             + tag + '</div></a>'
 			    + '<a href="' + commentLink + '" class="hn_link" title="' + commentText + '"><img src="img/'
@@ -79,6 +79,18 @@ $('#st_form').submit(function(e) {
                 strokeStyle: '#ef4136',
                 cssStyles: {color: '#FFF'},
                 positions: ['right', 'left']
+            });
+            $('.article_link').bt({
+                padding: 20,
+                width: 325,
+                spikeLength: 0,
+                spikeGirth: 0,
+                cornerRadius: 20,
+                fill: 'rgba(0, 0, 0, .8)',
+                strokeWidth: 3,
+                strokeStyle: '#ef4136',
+                cssStyles: {color: '#FFF', fontWeight: 'bold'},
+                positions: ['top']
             });
         },
         complete: function() {
