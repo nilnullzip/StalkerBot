@@ -51,7 +51,7 @@ $('#st_form').submit(function(e) {
 				   + '<a href="' + articleLink + '" style="text-decoration:none" class="article_link" title="' + tags + '">'
 				   + articleTitle
 				   + '</a>'
-				   +'<br/><br/>' );
+				   + '<br/>' );
 		
 		// Once around for each sentiment
 
@@ -84,9 +84,6 @@ $('#st_form').submit(function(e) {
                 $('#topic').append('<br/><br/>');
                 $('#topic').append('<br/><br/>');
                 blockCount = 0;
-            });
-            $(document).ready(function(){
-		$(".title").ellipsis();
             });
             $('.hn_link').bt({
                 padding: 20,
