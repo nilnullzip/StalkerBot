@@ -98,7 +98,7 @@ def commentAndIdToTagSentiment(commentIdStructure):
                         if (CACHE_ON and os.path.isfile(tagCacheFileStr)):
                             cache = open(tagCacheFileStr, "r")
                             apiResponseFromCache = json.loads(cache.read())
-                            if ('tags' in apiResponseFromCache):
+                            if (('tags' in apiResponseFromCache) and (apiResponseFromCache['tags'] != [])):
                                 threadTags[self.curThreadId] = apiResponseFromCache['tags']
                             else:
                                 threadTags[self.curThreadId] = None
@@ -110,7 +110,7 @@ def commentAndIdToTagSentiment(commentIdStructure):
                             # Sleep before call in case hacker news was called prior
                             time.sleep(.05)
                             apiResponse = articleApiRequest(self.curArticleUrl)
-                            if ('tags' in apiResponse):
+                            if (('tags' in apiResponse) and (apiResponse['tags'] != [])):
                                 threadTags[self.curThreadId] = apiResponse['tags']
                             else:
                                 threadTags[self.curThreadId] = None
@@ -128,6 +128,7 @@ def commentAndIdToTagSentiment(commentIdStructure):
             
             if (self.curThreadId in threadTags):
                 tags = threadTags[self.curThreadId]
+                print threadTags[self.curThreadId]
             
             sentCacheFileStr = SENTIMENT_CACHE_DIRECTORY + "/" + self.curCommentId
             if (CACHE_ON):
@@ -149,6 +150,9 @@ def commentAndIdToTagSentiment(commentIdStructure):
 #            for tag in tags:
 #                structForJS = [tag, maxSentiments, self.curComment, self.curThreadUrl, self.curArticleUrl]
 #                tagSentUrlComment.append(structForJS)
+            print self.curArticleTitle
+            print tags
+            print
             structForJS = [tags, maxSentiments, self.curComment, self.curThreadUrl, self.curArticleUrl, self.curArticleTitle]
             if (not (None in structForJS)):
                 tagSentUrlComment.append(structForJS)
