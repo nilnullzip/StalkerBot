@@ -90,8 +90,8 @@ $('#st_form').submit(function(e) {
             $('.hn_link').bt({
                 padding: 20,
                 width: 500,
-                spikeLength: 20,
-                spikeGirth: 20,
+                spikeLength: 15,
+                spikeGirth: 40,
                 cornerRadius: 20,
                 fill: 'rgba(0, 0, 0, .8)',
                 strokeWidth: 3,
@@ -99,6 +99,8 @@ $('#st_form').submit(function(e) {
                 cssStyles: {color: '#FFF'},
                 positions: ['top', 'bottom'],
                 activeClass: 'hn_link_active',
+                centerPointX: .60,
+                overlap: -10,
             });
             $('.article_link').bt({
                 padding: 15,
