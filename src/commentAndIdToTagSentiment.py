@@ -1,10 +1,13 @@
 #!/usr/bin/python
 
-import json, threading, time, datetime, urllib, re, os
+import json, threading, time, datetime, urllib, re, os, tempfile
 
 from scrape_kevin import scrape as scrape_kevin
 from tag_generation import generateTags
 from effectcheck_api import getSentiment
+
+# Determines whether caching is on or off
+CACHE_ON = True
 
 TAG_CACHE_DIRECTORY = "../cache/tags"
 SENTIMENT_CACHE_DIRECTORY = "../cache/sentiments"
@@ -19,8 +22,9 @@ def ensure_dir(f):
 # Takes in a Hacker News Thread ID String
 def hnThreadIdToArticleUrl( threadId ):
     urlCacheFileStr = ARTICLE_URL_CACHE_DIRECTORY + "/" + threadId
-    ensure_dir(urlCacheFileStr)
-    if (os.path.isfile(urlCacheFileStr)):
+    if (CACHE_ON):
+        ensure_dir(urlCacheFileStr)
+    if (CACHE_ON and os.path.isfile(urlCacheFileStr)):
         cache = open(urlCacheFileStr, "r")
         articleUrl = json.loads(cache.read())
     else:
@@ -38,8 +42,11 @@ def hnThreadIdToArticleUrl( threadId ):
             articleUrl = None
         else:
             articleUrl = link
-        # Cache
-        cache = open(urlCacheFileStr, "w")
+        if (CACHE_ON):
+            # Cache
+            cache = open(urlCacheFileStr, "w")
+        else:
+            cache = tempfile.TemporaryFile()
         cache.write(json.dumps(articleUrl))
     cache.close()
     return articleUrl    
@@ -86,31 +93,39 @@ def commentAndIdToTagSentiment(commentIdStructure):
                     if (not (self.curThreadId in threadTagsChecked)):
                         threadTagsChecked.append(self.curThreadId)
                         tagCacheFileStr = TAG_CACHE_DIRECTORY + "/" + self.curThreadId
-                        ensure_dir(tagCacheFileStr)
-                        if (os.path.isfile(tagCacheFileStr)):
+                        if (CACHE_ON):
+                            ensure_dir(tagCacheFileStr)
+                        if (CACHE_ON and os.path.isfile(tagCacheFileStr)):
                             cache = open(tagCacheFileStr, "r")
                             threadTags[self.curThreadId] = json.loads(cache.read())
                         else:
                             # Sleep before call in case hacker news was called prior
                             time.sleep(.05)
                             threadTags[self.curThreadId] = generateTags(self.curArticleUrl)
-                            # Cache article tags
-                            cache = open(tagCacheFileStr, "w")
+                            if (CACHE_ON):
+                                # Cache article tags
+                                cache = open(tagCacheFileStr, "w")
+                            else:
+                                cache = tempfile.TemporaryFile()
                             cache.write(json.dumps(threadTags[self.curThreadId]))
                         cache.close()
             
             tags = threadTags[self.curThreadId]
             
             sentCacheFileStr = SENTIMENT_CACHE_DIRECTORY + "/" + self.curCommentId
-            ensure_dir(sentCacheFileStr)
-            if (os.path.isfile(sentCacheFileStr)):
+            if (CACHE_ON):
+                ensure_dir(sentCacheFileStr)
+            if (CACHE_ON and os.path.isfile(sentCacheFileStr)):
                 cache = open(sentCacheFileStr, "r")
                 maxSentiments = json.loads(cache.read())
             else:
                 sentiment = getSentiment(self.curComment)
                 maxSentiments = getMaxSentiments(sentiment)
-                # Cache max sentiments
-                cache = open(sentCacheFileStr, "w")
+                if (CACHE_ON):
+                    # Cache max sentiments
+                    cache = open(sentCacheFileStr, "w")
+                else:
+                    cache = tempfile.TemporaryFile()
                 cache.write(json.dumps(maxSentiments))
             cache.close()
             
@@ -148,15 +163,19 @@ def getUserTopicSentiments(userid):
     todaystr = today.isoformat()
 
     scrapedCommentsCacheFileStr = SCRAPED_COMMENTS_CACHE_DIRECTORY + "/" + todaystr + "/" + userid
-    ensure_dir(scrapedCommentsCacheFileStr)
+    if (CACHE_ON):
+        ensure_dir(scrapedCommentsCacheFileStr)
     
-    if (os.path.isfile(scrapedCommentsCacheFileStr)):
+    if (CACHE_ON and os.path.isfile(scrapedCommentsCacheFileStr)):
         cache = open(scrapedCommentsCacheFileStr, "r")
         scrapedComments = json.loads(cache.read())
     else:
         scrapedComments = scrape(userid)
-        # Cache
-        cache = open(scrapedCommentsCacheFileStr, "w")
+        if (CACHE_ON):
+            # Cache
+            cache = open(scrapedCommentsCacheFileStr, "w")
+        else:
+            cache = tempfile.TemporaryFile()
         cache.write(json.dumps(scrapedComments))
     cache.close()
     
