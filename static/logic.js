@@ -89,7 +89,7 @@ $('#st_form').submit(function(e) {
             });
             $('.hn_link').bt({
                 padding: 20,
-                width: 275,
+                width: 500,
                 spikeLength: 20,
                 spikeGirth: 20,
                 cornerRadius: 20,
