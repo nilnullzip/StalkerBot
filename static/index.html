@@ -11,10 +11,12 @@
 <body>
   <div id="wrapper">
     <div id="header">
+      <a title="Stalk, Stalk, Stalk, Stalk... I love to stalk HN users.">
       <img src="img/stalkerbot.png" alt="stalkerbot" />
+      <a/>
       <span>stalkerbot</span>
       <p>
-        Reveal how a HN user feels
+        Reveal how a <a href="http://news.ycombinator.com/">HN<a/> user feels
         based on their comments
       </p>
     </div>
@@ -33,15 +35,35 @@
     </div>
   </div>
   <div style="text-align: center; display:none;" id="loading">
+    <a title="Really, this will likely take ~60 seconds, maybe more.">
     <p style="margin-bottom:10px;">Stalking... This will take a minute.</p>
     <img src="img/ajax-loader.gif" alt="loading">
+    <a/>
   </div>
   <script src="logic.js" type="text/javascript" charset="utf-8"></script>
   <div style="text-align: center;">
-  What is going on here:<br/><br/>
-  1. We look up comments from user that you are stalking.<br/>
-  2. We send the article to DiffBot to extract comment title and tags.<br/>
-  3. We send the comment text to EffectCheck to extract sentiments.<br/>
+    <br/><br/>
+    What is going on here?<br/><br/>
+    1. Find and scrape HN comments posted by specified user,<br/>
+    2. Use <a href="http://www.diffbot.com/docs">DiffBot API<a/> to extract subject and tags from articles,<br/>
+    3. Use <a href="http://effectcheck.com/">EffectCheck API<a/> to extract sentiments from user's comments,<br/>
+    4. Display an amusing and arguably random view of the user's sentiments.<br/>
+    5. Written with Python, JavaScript, and JQuery.
+    <br/><br/>
+    StalkerBot was created at 
+    <a href="http://www.diffbot.com/webmininghackday">
+    DiffBot Web Mining Hack Day
+    <a/>
+    by:<br/><br/>
+    <a title="dstein64">Daniel Steinberg<a/><br/>
+    Debasish Das<br/>
+    Kevin Nam Truong<br/>
+    <a href="http://www.logician.com">Juan Pineda<a/><br/>
+    <a title="melissamiranda">Melissa Miranda<a/><br/>
+    Victoria Pan<br/>
+    <br/>
+    Thanks to <a href="http://www.diffbot.com">DiffBot<a/> for hosting an amusing Hackathon!<br/>
+    (And for convincing us to waste an otherwise beautiful Sunday coding up this silliness.)<br/>
+    <br/>
   </div>
 </body>
-
