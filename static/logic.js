@@ -37,6 +37,7 @@ $('#st_form').submit(function(e) {
 				commentLink = element[3];
 				articleLink = element[4];
 				articleTitle = htmlEncode(element[5]);
+				commentId = element[6];
 				console.log(element, tag, sentimentList);
 
 				var tags = "";
@@ -69,10 +70,8 @@ $('#st_form').submit(function(e) {
 
 					// Append sentiment icon
 
-					var li = $('<li class="object">'
-							+ '<a href="' + commentLink + '" class="hn_link" title="' + commentText + '">'
+					var li = $('<li class="object ' + commentId + '">'
 							+ '<img src="img/' + sentimentAdj[sentiment] + '.png" alt="sentiment"/>'
-							+ '</a>'
 							+ '<div class="sentiment">' + sentimentAdj[sentiment] + '</div>'
 							+ '</li>');
 
@@ -80,7 +79,10 @@ $('#st_form').submit(function(e) {
 					$('#topic').append(li);
 					blockCount++;
 				});
-				$('#topic').append('<br/><br/><br/>');
+				
+				$('.' + commentId).wrapAll('<a href="' + commentLink + '" class="hn_link" title="' + commentText + '"/>');
+				
+				$('#topic').append('<br/><br/>');
 				blockCount = 0;
 			});
 			$('.hn_link').bt({
@@ -93,7 +95,7 @@ $('#st_form').submit(function(e) {
 				strokeWidth: 3,
 				strokeStyle: '#ef4136',
 				cssStyles: {color: '#FFF'},
-				positions: ['right', 'left']
+				positions: ['most']
 			});
 			$('.article_link').bt({
 				padding: 15,

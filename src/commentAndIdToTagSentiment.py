@@ -149,7 +149,7 @@ def commentAndIdToTagSentiment(commentIdStructure):
 #            for tag in tags:
 #                structForJS = [tag, maxSentiments, self.curComment, self.curThreadUrl, self.curArticleUrl]
 #                tagSentUrlComment.append(structForJS)
-            structForJS = [tags, maxSentiments, self.curComment, self.curThreadUrl, self.curArticleUrl, self.curArticleTitle]
+            structForJS = [tags, maxSentiments, self.curComment, self.curThreadUrl, self.curArticleUrl, self.curArticleTitle, self.curCommentId]
             if (not (None in structForJS)):
                 tagSentUrlComment.append(structForJS)
     
