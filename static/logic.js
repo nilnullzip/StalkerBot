@@ -85,9 +85,6 @@ $('#st_form').submit(function(e) {
                 $('#topic').append('<br/><br/>');
                 blockCount = 0;
             });
-            $(document).ready(function(){
-		$(".title").ellipsis();
-            });
             $('.hn_link').bt({
                 padding: 20,
                 width: 275,
