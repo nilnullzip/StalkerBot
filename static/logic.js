@@ -84,7 +84,7 @@ $('#st_form').submit(function(e) {
 
                 $('.' + commentId).wrapAll('<a href="' + commentLink + '" class="hn_link" title="' + commentText + '"/>');
 
-                $('#topic').append('<br/><br/>');
+                $('#topic').append('<br/><br/><br/>');
                 blockCount = 0;
             });
             $('.hn_link').bt({
@@ -97,7 +97,8 @@ $('#st_form').submit(function(e) {
                 strokeWidth: 3,
                 strokeStyle: '#ef4136',
                 cssStyles: {color: '#FFF'},
-                positions: ['top', 'bottom']
+                positions: ['top', 'bottom'],
+                activeClass: 'hn_link_active',
             });
             $('.article_link').bt({
                 padding: 15,
