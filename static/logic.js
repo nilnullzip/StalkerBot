@@ -6,7 +6,9 @@ $('#st_form').submit(function(e) {
     var val = $("#st_input", this).val();
     var url = "/cgi-bin/StalkerBotCGI.py";
 
-    console.log(val);
+    logging = false;
+
+    if (logging) console.log(val);
 
     function htmlEncode(str)
     {
@@ -23,7 +25,7 @@ $('#st_form').submit(function(e) {
         dataType: 'json',
         data:{ userid:val},
         success:function(data) {
-            console.log(data);
+            if (logging) console.log(data);
             var blockCount = 0;
 
             // Once around for each article/comment
@@ -38,7 +40,7 @@ $('#st_form').submit(function(e) {
                 articleLink = element[4];
                 articleTitle = htmlEncode(element[5]);
                 commentId = element[6];
-                console.log(element, tag, sentimentList);
+                if (logging) console.log(element, tag, sentimentList);
 
                 var tags = "";
                 $.each(element[0], function(index, tag) {
@@ -75,7 +77,7 @@ $('#st_form').submit(function(e) {
                             + '<div class="sentiment">' + sentimentAdj[sentiment] + '</div>'
                             + '</li>');
 
-                    console.log(li.val());
+                    if (logging) console.log(li.val());
                     $('#topic').append(li);
                     blockCount++;
                 });
