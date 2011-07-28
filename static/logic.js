@@ -95,7 +95,7 @@ $('#st_form').submit(function(e) {
 				strokeWidth: 3,
 				strokeStyle: '#ef4136',
 				cssStyles: {color: '#FFF'},
-				positions: ['most']
+				positions: ['top', 'bottom']
 			});
 			$('.article_link').bt({
 				padding: 15,
