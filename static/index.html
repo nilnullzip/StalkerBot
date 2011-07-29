@@ -11,10 +11,10 @@
 <body>
   <div id="wrapper">
     <div id="header">
-      <a title="Stalk, Stalk, Stalk, Stalk... I love stalking hackers.">
-      <img src="img/stalkerbot.png" alt="stalkerbot" />
+      <a href="javascript:stalkerbot_home();" onmouseover="window.status='stalkerbot'; return true;" onmouseout="window.status=''; return true;" class="home_link">
+      <img src="img/stalkerbot.png" title="Stalk, Stalk, Stalk, Stalk... I love stalking hackers." alt="stalkerbot" />
+      stalkerbot
       <a/>
-      <span>stalkerbot</span>
       <p>
         Reveal how a <a href="http://news.ycombinator.com/">Hacker News<a/> user feels
         based on their comments
@@ -40,7 +40,6 @@
     <img src="img/ajax-loader.gif" alt="loading">
     <a/>
   </div>
-  <script src="logic.js" type="text/javascript" charset="utf-8"></script>
   <div style="text-align: center;">
     <br/><br/>
     What is going on here?<br/><br/>
@@ -66,4 +65,5 @@
     (And for convincing us to waste an otherwise beautiful Sunday coding up this silliness.)<br/>
     <br/>
   </div>
+  <script src="logic.js" type="text/javascript" charset="utf-8"></script>
 </body>

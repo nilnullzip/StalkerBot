@@ -122,3 +122,6 @@ $('#st_form').submit(function(e) {
     });
 });
 
+function stalkerbot_home() {
+    $('#topic').empty();
+};
