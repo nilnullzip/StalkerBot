@@ -12,11 +12,11 @@
   <div id="wrapper">
     <div id="header">
       <a href="" onclick="return stalkerbot_home();" class="home_link">
-      <img src="img/stalkerbot.png" title="Stalk, Stalk, Stalk, Stalk... I love stalking hackers." alt="stalkerbot" />
+      <img src="img/stalkerbot.png" title="Stalk, Stalk, Stalk... A bot's work is never done." alt="stalkerbot" />
       stalkerbot
       <a/>
       <p>
-        View <a href="http://news.ycombinator.com/">Hacker News<a/> user's recent comments and sentiments.
+        View <a href="http://news.ycombinator.com/">Hacker News<a/> user's recent comments and state of mind.
       </p>
     </div>
     <form id="st_form" action="stalkerbot_submit" method="get" accept-charset="utf-8">
@@ -37,31 +37,33 @@
     <a title="Really, this will likely take ~60 seconds, maybe more.">
     <p style="margin-bottom:10px;">Stalking... This will take a minute.</p>
     <img src="img/ajax-loader.gif" alt="loading">
-    <a/>
+    </a>
   </div>
-  <div style="text-align: center;">
+  <div style="text-align: left; margin: 0 auto; width: 700px">
     <br/><br/>
     What is going on here?<br/><br/>
-    Find and scrape top-level HN comments posted by specified user,<br/>
-    Use <a href="http://www.diffbot.com/docs">Diffbot API<a/> to extract subject and tags from corresponding article submissions,<br/>
-    Use <a href="http://effectcheck.com/">EffectCheck API<a/> to analyze sentiments from user's comments,<br/>
-    Display an amusing and arguably random view of the user's sentiments.<br/>
-    Written with Python, JavaScript, and JQuery. Sorry for the slow CGI method.
-    <br/><br/>
-    StalkerBot was created at 
-    <a href="http://www.diffbot.com/webmininghackday">
-    Diffbot Web Mining Hack Day
-    <a/>
-    by:<br/><br/>
-    <a href="http://www.dannyadam.com" title="dstein64">Daniel Steinberg<a/><br/>
-    Debasish Das<br/>
-    Kevin Nam Truong<br/>
-    <a href="http://www.logician.com">Juan Pineda<a/><br/>
-    <a title="melissamiranda">Melissa Miranda<a/><br/>
-    Victoria Pan<br/>
+    <div style="margin-left:30px;">
+    1. Find and scrape top-level HN comments posted by specified user,<br/>
+    2. Use <a href="http://www.diffbot.com/docs">Diffbot</a> to extract subject and tags from corresponding articles,<br/>
+    3. Use <a href="http://effectcheck.com/">EffectCheck</a> to analyze sentiments from user's comments,<br/>
+    4. Display an amusing and arguably random view of the user's sentiments.<br/>
+    5. Written with Python, JavaScript, and JQuery. Sorry for the slow CGI.
+    </div>
     <br/>
-    Thanks to <a href="http://www.diffbot.com">Diffbot<a/> for hosting an amusing Hackathon!<br/>
-    (And for convincing us to waste an otherwise beautiful Sunday coding up this silliness.)<br/>
+    StalkerBot was created at 
+    <a href="http://www.diffbot.com/webmininghackday">Diffbot Web Mining Hack Day</a>
+    by:<br/><br/>
+    <div style="margin-left:30px;">
+      Kevin Nam Truong<br/>
+      <a href="http://www.dannyadam.com" title="dstein64">Daniel Steinberg</a><br/>
+      Debasish Das<br/>
+      <a href="http://www.logician.com">Juan Pineda</a><br/>
+      <a title="melissamiranda">Melissa Miranda</a><br/>
+      Victoria Pan<br/>
+    </div>
+    <br/>
+    Thanks to <a href="http://www.diffbot.com">Diffbot<a/> for hosting a fun and productive Hackathon!
+    (And for tricking us into spending an otherwise beautiful summer Sunday coding up this silliness.)<br/>
     <br/>
   </div>
   <script src="logic.js" type="text/javascript" charset="utf-8"></script>
