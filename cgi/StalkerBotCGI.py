@@ -44,7 +44,7 @@ if (q.startswith("userid=")) :
     ignore, userid = q.split('userid=')
     userid = clean_userid(userid)
     if (len(userid)==0) :
-        s.wfile.write("[]")
+        print "[]"
         return
     log("[%s] Stalking: %s\n" % (datetime.datetime.today(), userid))
     print TS.getUserTopicSentiments(userid)
