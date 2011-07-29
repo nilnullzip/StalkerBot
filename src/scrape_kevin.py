@@ -15,6 +15,9 @@ def convert(html):
 
 
 def scrape(userID):
+    invalidChars = re.sub('[-_\\w]', '', userID)
+    if (len(userID) < 2 or len(userID) > 15 or len(invalidChars) > 0):
+	return -1
     allcomments = []
     allpostID = []
     result = []
@@ -24,10 +27,14 @@ def scrape(userID):
     postIDre = re.compile('<a href="item\?id=(.*)">parent</a> \| on: <a href="item\?id=(\\1)">')
     nexturlre = re.compile('class="title"><a href="(.*)" rel')
     commentIDre = re.compile('<a href="item\?id=([^>]*)">link</a>')
-
+    checkUser = True
 
     while (nexturl and len(result) < 10):
         content = urllib.urlopen(nexturl).read()
+	if (checkUser == True):
+	    if (content == 'No such user.'):
+		return -1
+	    checkUser = False
         allcommentfield = commentfieldre.findall(content)
         for currfield in allcommentfield:
             postID = []
