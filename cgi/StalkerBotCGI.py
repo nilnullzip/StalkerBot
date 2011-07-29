@@ -26,13 +26,26 @@ def log (msg) :
 import datetime
 log ("[%s] URL: %s\n" % (datetime.datetime.today(), q))
 
+def clean_userid(u) :
+    if len(u) >32 :
+        log("[%s] userid too long.\n" % (datetime.datetime.today()))
+        return ""
+    for c in u :
+        if ( not c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_") :
+            log("[%s] bad character in userid: %s\n" % (datetime.datetime.today(), u))
+            return ""
+    return u
+
 if (q.startswith("userid=")) :
     print "Content-Type: text/html"
     print "Status: 200 OK"
     print
 
     ignore, userid = q.split('userid=')
-    userid = userid[0:32]
+    userid = clean_userid(userid)
+    if (len(userid)==0) :
+        s.wfile.write("[]")
+        return
     log("[%s] Stalking: %s\n" % (datetime.datetime.today(), userid))
     print TS.getUserTopicSentiments(userid)
     log("[%s] Done stalking: %s\n" % (datetime.datetime.today(), userid))

@@ -38,9 +38,21 @@ def log (msg) :
         LOG.close()
         sys.stderr.write (msg)
 
+import datetime
+
+def clean_userid(u) :
+    if len(u) >32 :
+        log("[%s] userid too long.\n" % (datetime.datetime.today()))
+        return ""
+    for c in u :
+        if ( not c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_") :
+            log("[%s] bad character in userid: %s\n" % (datetime.datetime.today(), u))
+            return ""
+    return u
+
 class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+
     def do_GET(s) :
-        import datetime
         log("[%s] URL: %s\n" % (datetime.datetime.today(), s.path))
 #        if (s.path.startswith("/cgi-bin/StalkerBotCGI.py?userid=")) :
         if (s.path.startswith("/cgi-bin/StalkerBotCGI.py?")) :
@@ -48,7 +60,10 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             s.send_header("Content-type", "text/html")
             s.end_headers()
             ignore, userid = s.path.split('userid=')
-            userid = userid[0:32]
+            userid = clean_userid(userid)
+            if (len(userid)==0) :
+                s.wfile.write("[]")
+                return
             log("[%s] Stalking: %s\n" % (datetime.datetime.today(), userid))
             s.wfile.write(TS.getUserTopicSentiments(userid))
             log("[%s] Done stalking: %s\n" % (datetime.datetime.today(), userid))
