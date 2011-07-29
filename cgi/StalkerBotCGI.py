@@ -32,6 +32,7 @@ if (q.startswith("userid=")) :
     print
 
     ignore, userid = q.split('userid=')
+    userid = userid[0:32]
     log("[%s] Stalking: %s\n" % (datetime.datetime.today(), userid))
     print TS.getUserTopicSentiments(userid)
     log("[%s] Done stalking: %s\n" % (datetime.datetime.today(), userid))

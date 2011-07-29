@@ -48,6 +48,7 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             s.send_header("Content-type", "text/html")
             s.end_headers()
             ignore, userid = s.path.split('userid=')
+            userid = userid[0:32]
             log("[%s] Stalking: %s\n" % (datetime.datetime.today(), userid))
             s.wfile.write(TS.getUserTopicSentiments(userid))
             log("[%s] Done stalking: %s\n" % (datetime.datetime.today(), userid))
