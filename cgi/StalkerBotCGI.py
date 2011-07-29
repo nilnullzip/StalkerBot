@@ -45,7 +45,7 @@ if (q.startswith("userid=")) :
     userid = clean_userid(userid)
     if (len(userid)==0) :
         print "[]"
-        return
-    log("[%s] Stalking: %s\n" % (datetime.datetime.today(), userid))
-    print TS.getUserTopicSentiments(userid)
-    log("[%s] Done stalking: %s\n" % (datetime.datetime.today(), userid))
+    else :
+        log("[%s] Stalking: %s\n" % (datetime.datetime.today(), userid))
+        print TS.getUserTopicSentiments(userid)
+        log("[%s] Done stalking: %s\n" % (datetime.datetime.today(), userid))
