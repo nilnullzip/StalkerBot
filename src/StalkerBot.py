@@ -41,11 +41,11 @@ def log (msg) :
 import datetime
 
 def clean_userid(u) :
-    if len(u) >32 :
+    if len(u) >16 :
         log("[%s] userid too long.\n" % (datetime.datetime.today()))
         return ""
     for c in u :
-        if ( not c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_") :
+        if ( not c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-") :
             log("[%s] bad character in userid: %s\n" % (datetime.datetime.today(), u))
             return ""
     return u
