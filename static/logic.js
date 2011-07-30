@@ -28,6 +28,14 @@ $('#st_form').submit(function(e) {
             if (logging) console.log(data);
             var blockCount = 0;
 
+            if (data == null) {
+                $('#topic').append('<br/>You think I was born yesterday? Give me an actual HN username!<br/>');
+                }
+            else if (data.length == 0) {
+                $('#topic').append('<br/>That one had nothing to say. Try another.<br/>');
+                }
+            else
+
             // Once around for each article/comment
 
             $.each(data, function(index, element) {
