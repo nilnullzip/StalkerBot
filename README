@@ -1,5 +1,6 @@
-StalkerBot: Reveal how a HN user feels based on their comments.
----------------------------------------------------------------
+StalkerBot: View Hacker News user's comments and state of mind
+--------------------------------------------------------------
+Writen by: Kevin Nam Truong, Daniel Steinberg, Debasish Das, Juan Pineda, Melissa Miranda, Victoria Pan.
 
 You can run StalkerBot server two ways:
 
@@ -10,7 +11,7 @@ You can run StalkerBot server two ways:
 
 To access StalkerBot web page locally (under OSX) use the following URL:
 
-http://localhost:8000/stalkerbot.html
+http://localhost:8000/
 
 Log output will be written to StalkerBot/StalkerBot.log file.
 
