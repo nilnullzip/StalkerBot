@@ -5,3 +5,5 @@ StalkerBot.log
 .pydevproject
 .project
 /cache
+custom-cache-dir
+/stalkerbot-cache

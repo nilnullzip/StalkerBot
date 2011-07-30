@@ -8,11 +8,29 @@ from effectcheck_api import getSentiment
 
 # Determines whether caching is on or off
 CACHE_ON = True
+BASE_CACHE_DIRECTORY = "/var/tmp"
 
-DIFFBOT_API_CACHE_DIRECTORY = "../cache/diffbot-api"
-SENTIMENT_CACHE_DIRECTORY = "../cache/sentiments"
-ARTICLE_URL_CACHE_DIRECTORY = "../cache/article-urls"
-SCRAPED_COMMENTS_CACHE_DIRECTORY = "../cache/scraped-comment-data"
+# Check for user specified BASE_CACHE_DIRECTORY in ../custom-cache-dir file
+# Relative references (.. and .) should be relative to the src folder, although
+# the file is in one level higher
+if (os.path.isfile("../custom-cache-dir")):
+    BASE_CACHE_DIRECTORY = open("../custom-cache-dir", "r").readline()
+    
+# Raise exception if BASE_CACHE_DIRECTORY does not exist
+if not os.path.exists(BASE_CACHE_DIRECTORY):
+    raise IOError("BASE_CACHE_DIRECTORY " + BASE_CACHE_DIRECTORY + " must exist")
+
+DIFFBOT_API_CACHE_DIRECTORY = BASE_CACHE_DIRECTORY + "/stalkerbot-cache/diffbot-api"
+SENTIMENT_CACHE_DIRECTORY = BASE_CACHE_DIRECTORY + "/stalkerbot-cache/sentiments"
+ARTICLE_URL_CACHE_DIRECTORY = BASE_CACHE_DIRECTORY + "/stalkerbot-cache/article-urls"
+SCRAPED_COMMENTS_CACHE_DIRECTORY = BASE_CACHE_DIRECTORY + "/stalkerbot-cache/scraped-comment-data"
+
+# Number of seconds for which cached data will be reused
+# There are 86,400 seconds in a day and 604,800 seconds in a week
+DIFFBOT_API_CACHE_UPDATE_THRESHOLD = 604800
+SENTIMENT_CACHE_UPDATE_THRESHOLD = 604800
+ARTICLE_URL_CACHE_UPDATE_THRESHOLD = 604800
+SCRAPED_COMMENTS_CACHE_UPDATE_THRESHOLD = 86400
 
 def ensure_dir(f):
     d = os.path.dirname(f)
@@ -22,12 +40,16 @@ def ensure_dir(f):
 # Takes in a Hacker News Thread ID String
 def hnThreadIdToArticleUrl( threadId ):
     urlCacheFileStr = ARTICLE_URL_CACHE_DIRECTORY + "/" + threadId
+    urlCacheLoaded = False
     if (CACHE_ON):
         ensure_dir(urlCacheFileStr)
-    if (CACHE_ON and os.path.isfile(urlCacheFileStr)):
-        cache = open(urlCacheFileStr, "r")
-        articleUrl = json.loads(cache.read())
-    else:
+        if os.path.isfile(urlCacheFileStr):
+            urlCacheFileAge = time.time() - os.path.getmtime(urlCacheFileStr)
+            if urlCacheFileAge < ARTICLE_URL_CACHE_UPDATE_THRESHOLD:
+                cache = open(urlCacheFileStr, "r")
+                articleUrl = json.loads(cache.read())
+                urlCacheLoaded = True
+    if not urlCacheLoaded:
         url = "http://news.ycombinator.com/item?id=" + threadId
         urlConn = urllib.urlopen(url)
         siteHtml = urlConn.read()
@@ -93,20 +115,24 @@ def commentAndIdToTagSentiment(commentIdStructure):
                     if (not (self.curThreadId in threadTagsChecked)):
                         threadTagsChecked.append(self.curThreadId)
                         tagCacheFileStr = DIFFBOT_API_CACHE_DIRECTORY + "/" + self.curThreadId
+                        tagCacheLoaded = False
                         if (CACHE_ON):
                             ensure_dir(tagCacheFileStr)
-                        if (CACHE_ON and os.path.isfile(tagCacheFileStr)):
-                            cache = open(tagCacheFileStr, "r")
-                            apiResponseFromCache = json.loads(cache.read())
-                            if (('tags' in apiResponseFromCache) and (apiResponseFromCache['tags'] != [])):
-                                threadTags[self.curThreadId] = apiResponseFromCache['tags']
-                            else:
-                                threadTags[self.curThreadId] = None
-                            if ('title' in apiResponseFromCache):
-                                self.curArticleTitle = apiResponseFromCache['title']
-                            else:
-                                self.curArticleTitle = None
-                        else:
+                            if os.path.isfile(tagCacheFileStr):
+                                tagCacheFileAge = time.time() - os.path.getmtime(tagCacheFileStr)
+                                if tagCacheFileAge < DIFFBOT_API_CACHE_UPDATE_THRESHOLD:
+                                    cache = open(tagCacheFileStr, "r")
+                                    apiResponseFromCache = json.loads(cache.read())
+                                    tagCacheLoaded = True
+                                    if (('tags' in apiResponseFromCache) and (apiResponseFromCache['tags'] != [])):
+                                        threadTags[self.curThreadId] = apiResponseFromCache['tags']
+                                    else:
+                                        threadTags[self.curThreadId] = None
+                                    if ('title' in apiResponseFromCache):
+                                        self.curArticleTitle = apiResponseFromCache['title']
+                                    else:
+                                        self.curArticleTitle = None
+                        if not tagCacheLoaded:
                             # Sleep before call in case hacker news was called prior
                             time.sleep(.05)
                             apiResponse = articleApiRequest(self.curArticleUrl)
@@ -130,12 +156,16 @@ def commentAndIdToTagSentiment(commentIdStructure):
                 tags = threadTags[self.curThreadId]
             
             sentCacheFileStr = SENTIMENT_CACHE_DIRECTORY + "/" + self.curCommentId
+            sentCacheLoaded = False
             if (CACHE_ON):
                 ensure_dir(sentCacheFileStr)
-            if (CACHE_ON and os.path.isfile(sentCacheFileStr)):
-                cache = open(sentCacheFileStr, "r")
-                maxSentiments = json.loads(cache.read())
-            else:
+                if os.path.isfile(sentCacheFileStr):
+                    sentCacheFileAge = time.time() - os.path.getmtime(sentCacheFileStr)
+                    if sentCacheFileAge < SENTIMENT_CACHE_UPDATE_THRESHOLD:
+                        cache = open(sentCacheFileStr, "r")
+                        maxSentiments = json.loads(cache.read())
+                        sentCacheLoaded = True
+            if not sentCacheLoaded:
                 sentiment = getSentiment(self.curComment)
                 maxSentiments = getMaxSentiments(sentiment)
                 if (CACHE_ON):
@@ -176,18 +206,17 @@ def commentAndIdToTagSentiment(commentIdStructure):
     return json.dumps(tagSentUrlComment)
 
 def getUserTopicSentiments(userid):
-    # Only scrape once per day
-    today = datetime.date.today()
-    todaystr = today.isoformat()
-
-    scrapedCommentsCacheFileStr = SCRAPED_COMMENTS_CACHE_DIRECTORY + "/" + todaystr + "/" + userid
+    scrapedCommentsCacheFileStr = SCRAPED_COMMENTS_CACHE_DIRECTORY + "/" + userid
+    scrapedCommentsCacheLoaded = False
     if (CACHE_ON):
         ensure_dir(scrapedCommentsCacheFileStr)
-    
-    if (CACHE_ON and os.path.isfile(scrapedCommentsCacheFileStr)):
-        cache = open(scrapedCommentsCacheFileStr, "r")
-        scrapedComments = json.loads(cache.read())
-    else:
+        if os.path.isfile(scrapedCommentsCacheFileStr):
+            scrapedCommentsCacheFileAge = time.time() - os.path.getmtime(scrapedCommentsCacheFileStr)
+            if scrapedCommentsCacheFileAge < SCRAPED_COMMENTS_CACHE_UPDATE_THRESHOLD:
+                cache = open(scrapedCommentsCacheFileStr, "r")
+                scrapedComments = json.loads(cache.read())
+                scrapedCommentsCacheLoaded = True
+    if not scrapedCommentsCacheLoaded:
         scrapedComments = scrape(userid)
         if (CACHE_ON):
             # Cache
