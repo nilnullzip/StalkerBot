@@ -9,6 +9,8 @@ function on_submit(username) {
 
     if (logging) console.log(username);
 
+    var status = 0;
+
     $.ajax({
         url: url,
         dataType: 'json',
@@ -18,16 +20,18 @@ function on_submit(username) {
             var blockCount = 0;
 
             if (data == null) {
-                $('#topic').append('<br/>You think I was born yesterday? Give me an actual HN username!<br/>');
+                status = 0;
                 }
             else if (data.length == 0) {
-                $('#topic').append('<br/>That one had nothing to say. Try another.<br/>');
+                status = 1;
                 }
             else
 
             // Once around for each article/comment
 
             $.each(data, function(index, element) {
+                status = 2;
+
                 // element has format ['tag', ['sentiment1'(,'sentiment2',...)]]
 
                 tag = element[0][0];
@@ -115,6 +119,12 @@ function on_submit(username) {
         },
         complete: function() {
             $('#loading').hide();
+            if (status == 0) {
+                $('#topic').append('<br/>You think I was born yesterday? Give me an actual HN username!<br/>');
+                }
+            else if (status == 1) {
+                $('#topic').append('<br/>That one had nothing to say. Try another.<br/>');
+                }
         }
     });
 }
