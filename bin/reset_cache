@@ -1,2 +1,2 @@
 #!/bin/sh
-rm -r cache/*
+rm -r /var/tmp/stalkerbot-cache

@@ -1,4 +1,0 @@
-#!/bin/sh
-mkdir -p cache
-chmod a+w cache
-chmod a+x cache
