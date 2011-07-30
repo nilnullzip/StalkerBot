@@ -140,7 +140,10 @@ $.address.init(function() {
     $('a.home_link').address();
 }).change(function(event) {
     var username = event.value.substr(1);
-    if (username != '') {
+    if (username == '') {
+        $('#topic').empty();
+        $("#st_input").val('');
+    } else {
         $("#st_input").val(username);
         on_submit(username);
     }
