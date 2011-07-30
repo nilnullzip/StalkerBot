@@ -1,29 +1,18 @@
-$('#st_form').submit(function(e) {
-    e.preventDefault();
+function on_submit(username) {
     $('#loading').show();
 
     $('#topic').empty();
-    var val = $("#st_input", this).val();
+    
     var url = "/cgi-bin/StalkerBotCGI.py";
 
     logging = false;
 
-    if (logging) console.log(val);
-
-    function htmlEncode(str)
-    {
-        str = str.replace(/&/g, "&amp;");
-        str = str.replace(/>/g, "&gt;");
-        str = str.replace(/</g, "&lt;");
-        str = str.replace(/"/g, "&quot;");
-        str = str.replace(/'/g, "&#039;");
-        return str;
-    }
+    if (logging) console.log(username);
 
     $.ajax({
         url: url,
         dataType: 'json',
-        data:{ userid:val},
+        data:{ userid:username},
         success:function(data) {
             if (logging) console.log(data);
             var blockCount = 0;
@@ -85,7 +74,7 @@ $('#st_form').submit(function(e) {
                             + '<div class="sentiment">' + sentimentAdj[sentiment] + '</div>'
                             + '</li>');
 
-                    if (logging) console.log(li.val());
+                    if (logging) console.log(li.user());
                     $('#topic').append(li);
                     blockCount++;
                 });
@@ -128,8 +117,36 @@ $('#st_form').submit(function(e) {
             $('#loading').hide();
         }
     });
+}
+
+$('#st_form').submit(function(e) {
+    e.preventDefault();
+    var username = $("#st_input", this).val();
+    $.address.value(username);
 });
 
-function stalkerbot_home() {
+$.address.init(function() {
+    // Initializes the plugin
+    $('a.home_link').address();
+}).change(function(event) {
+    var username = event.value.substr(1);
+    if (username != '') {
+        $("#st_input").val(username);
+        on_submit(username);
+    }
+});
+
+$('a.home_link').click(function(){
     $('#topic').empty();
-};
+    $("#st_input").val('');
+});
+
+function htmlEncode(str)
+{
+    str = str.replace(/&/g, "&amp;");
+    str = str.replace(/>/g, "&gt;");
+    str = str.replace(/</g, "&lt;");
+    str = str.replace(/"/g, "&quot;");
+    str = str.replace(/'/g, "&#039;");
+    return str;
+}
