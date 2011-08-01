@@ -5,6 +5,7 @@ import json, threading, time, datetime, urllib, re, os, tempfile
 from scrape_kevin import scrape as scrape_kevin
 from tag_generation import articleApiRequest
 from effectcheck_api import getSentiment
+from read_key import readKey
 
 # Determines whether caching is on or off
 CACHE_ON = True
@@ -94,6 +95,8 @@ def commentAndIdToTagSentiment(commentIdStructure):
     threadTags = {}
     threadTagsChecked = [] # List for tracking whether for generating a tag was made yet
     tagSentUrlComment = []
+    diffbotApiKey = readKey("diffbot-article-api")
+    effectCheckApiKey = readKey("effectcheck")
     
     class GetTags ( threading.Thread ):
         # Override Thread's __init__ method to accept the parameters needed:
@@ -135,7 +138,7 @@ def commentAndIdToTagSentiment(commentIdStructure):
                         if not tagCacheLoaded:
                             # Sleep before call in case hacker news was called prior
                             time.sleep(.05)
-                            apiResponse = articleApiRequest(self.curArticleUrl)
+                            apiResponse = articleApiRequest(self.curArticleUrl, diffbotApiKey)
                             if (('tags' in apiResponse) and (apiResponse['tags'] != [])):
                                 threadTags[self.curThreadId] = apiResponse['tags']
                             else:
@@ -166,7 +169,7 @@ def commentAndIdToTagSentiment(commentIdStructure):
                         maxSentiments = json.loads(cache.read())
                         sentCacheLoaded = True
             if not sentCacheLoaded:
-                sentiment = getSentiment(self.curComment)
+                sentiment = getSentiment(self.curComment, effectCheckApiKey)
                 maxSentiments = getMaxSentiments(sentiment)
                 if (CACHE_ON):
                     # Cache max sentiments
