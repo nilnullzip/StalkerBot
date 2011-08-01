@@ -97,6 +97,10 @@ def commentAndIdToTagSentiment(commentIdStructure):
     tagSentUrlComment = []
     diffbotApiKey = readKey("diffbot-article-api")
     effectCheckApiKey = readKey("effectcheck")
+    if (not diffbotApiKey):
+        raise Exception("Must specify a Diffbot article API key")
+    if (not diffbotApiKey):
+        raise Exception("Must specify an EffectCheck API key")
     
     class GetTags ( threading.Thread ):
         # Override Thread's __init__ method to accept the parameters needed:
