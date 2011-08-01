@@ -6,6 +6,7 @@ cgitb.enable()
 import SimpleHTTPServer
 import SocketServer
 import os, sys
+import traceback
 
 sys.path.append("../src")
 

@@ -49,6 +49,7 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             logger.log("Stalking: %s" % (userid))
             try :
                 s.wfile.write(TS.getUserTopicSentiments(userid))
+#                raise NameError("Test traceback")
             except:
                 logger.log (traceback.format_exc())
                 raise
