@@ -15,7 +15,7 @@ BASE_CACHE_DIRECTORY = "/var/tmp"
 # Relative references (.. and .) should be relative to the src folder, although
 # the file is in one level higher
 if (os.path.isfile("../options-and-settings/custom-cache-dir")):
-    BASE_CACHE_DIRECTORY = open("../options-and-settings/custom-cache-dir", "r").readline()
+    BASE_CACHE_DIRECTORY = open("../options-and-settings/custom-cache-dir", "r").readline().rstrip('\n').rstrip('\r')
     
 # Raise exception if BASE_CACHE_DIRECTORY does not exist
 if not os.path.exists(BASE_CACHE_DIRECTORY):
