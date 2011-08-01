@@ -31,5 +31,10 @@ if (q.startswith("userid=")) :
         print "[]"
     else :
         logger.log("Stalking: %s" % (userid))
-        print TS.getUserTopicSentiments(userid)
+        try :
+            print TS.getUserTopicSentiments(userid)
+#            raise NameError("Test traceback")
+        except :
+            logger.log (traceback.format_exc())
+            raise
         logger.log("Done stalking: %s" % (userid))

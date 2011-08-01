@@ -5,6 +5,7 @@ import SocketServer
 import os, sys
 import commentAndIdToTagSentiment as TS
 import logger
+import traceback
 
 from optparse import OptionParser
 
@@ -46,7 +47,11 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                 s.wfile.write("[]")
                 return
             logger.log("Stalking: %s" % (userid))
-            s.wfile.write(TS.getUserTopicSentiments(userid))
+            try :
+                s.wfile.write(TS.getUserTopicSentiments(userid))
+            except:
+                logger.log (traceback.format_exc())
+                raise
             logger.log("Done stalking: %s" % (userid))
         else :
             SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(s)
