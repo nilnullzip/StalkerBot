@@ -1,2 +1,2 @@
 #!/bin/sh
-mkdir options-and-settings/api-keys/
+mkdir -p options-and-settings/api-keys/
