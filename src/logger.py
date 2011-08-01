@@ -17,9 +17,9 @@ def log (msg) :
 def clean_userid(u) :
     if len(u) >16 :
         log("userid too long.")
-        return ""
+        return "_"
     for c in u :
         if ( not c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-") :
             log("bad character in userid: %s" % (u))
-            return ""
+            return "_"
     return u
