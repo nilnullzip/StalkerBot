@@ -4,6 +4,7 @@ import SimpleHTTPServer
 import SocketServer
 import os, sys
 import commentAndIdToTagSentiment as TS
+import logger
 
 from optparse import OptionParser
 
@@ -29,44 +30,24 @@ else:
 
 os.chdir("../static")
 
-logging = True
-
-def log (msg) :
-    if logging :
-        LOG = open ("../StalkerBot.log", "a")
-        LOG.write(msg)
-        LOG.close()
-        sys.stderr.write (msg)
-
-import datetime
-
-def clean_userid(u) :
-    if len(u) >16 :
-        log("[%s] userid too long.\n" % (datetime.datetime.today()))
-        return ""
-    for c in u :
-        if ( not c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-") :
-            log("[%s] bad character in userid: %s\n" % (datetime.datetime.today(), u))
-            return ""
-    return u
+logger.log_to_stderr = True
 
 class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     def do_GET(s) :
-        log("[%s] URL: %s\n" % (datetime.datetime.today(), s.path))
-#        if (s.path.startswith("/cgi-bin/StalkerBotCGI.py?userid=")) :
+        logger.log("URL: %s" % (s.path))
         if (s.path.startswith("/cgi-bin/StalkerBotCGI.py?")) :
             s.send_response(200)
             s.send_header("Content-type", "text/html")
             s.end_headers()
             ignore, userid = s.path.split('userid=')
-            userid = clean_userid(userid)
+            userid = logger.clean_userid(userid)
             if (len(userid)==0) :
                 s.wfile.write("[]")
                 return
-            log("[%s] Stalking: %s\n" % (datetime.datetime.today(), userid))
+            logger.log("Stalking: %s" % (userid))
             s.wfile.write(TS.getUserTopicSentiments(userid))
-            log("[%s] Done stalking: %s\n" % (datetime.datetime.today(), userid))
+            logger.log("Done stalking: %s" % (userid))
         else :
             SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(s)
         return

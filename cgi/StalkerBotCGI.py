@@ -10,31 +10,15 @@ import os, sys
 sys.path.append("../src")
 
 import commentAndIdToTagSentiment as TS
+import logger
+
+logger.log_to_stderr = False
 
 os.chdir("../static")
 
 q = os.environ["QUERY_STRING"]
 
-logging = True
-
-def log (msg) :
-    if logging :
-        LOG = open ("/tmp/StalkerBot.log", "a")
-        LOG.write(msg)
-        LOG.close()
-    
-import datetime
-log ("[%s] URL: %s\n" % (datetime.datetime.today(), q))
-
-def clean_userid(u) :
-    if len(u) >16 :
-        log("[%s] userid too long.\n" % (datetime.datetime.today()))
-        return ""
-    for c in u :
-        if ( not c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-") :
-            log("[%s] bad character in userid: %s\n" % (datetime.datetime.today(), u))
-            return ""
-    return u
+logger.log ("URL: %s" % (q))
 
 if (q.startswith("userid=")) :
     print "Content-Type: text/html"
@@ -42,10 +26,10 @@ if (q.startswith("userid=")) :
     print
 
     ignore, userid = q.split('userid=')
-    userid = clean_userid(userid)
+    userid = logger.clean_userid(userid)
     if (len(userid)==0) :
         print "[]"
     else :
-        log("[%s] Stalking: %s\n" % (datetime.datetime.today(), userid))
+        logger.log("Stalking: %s" % (userid))
         print TS.getUserTopicSentiments(userid)
-        log("[%s] Done stalking: %s\n" % (datetime.datetime.today(), userid))
+        logger.log("Done stalking: %s" % (userid))
