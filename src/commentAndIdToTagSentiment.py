@@ -50,7 +50,7 @@ def scrapeIdToUrl (threadId):
         return None
     link = regSearch.group(1)
     # if the link is back to the current page, return None
-    return articleUrl
+    return link
 
 def hnApiIdToUrl (threadId):
     params = "%s?format=json" % threadId
@@ -102,6 +102,7 @@ def scrape(userID):
 # and the second element has the corresponding comment
 def commentAndIdToTagSentiment(commentIdStructure):
     threadTags = {}
+    threadTitles = {}
     threadTagsChecked = [] # List for tracking whether for generating a tag was made yet
     tagSentUrlComment = []
     diffbotApiKey = readKey("diffbot-article-api")
@@ -145,9 +146,9 @@ def commentAndIdToTagSentiment(commentIdStructure):
                                     else:
                                         threadTags[self.curThreadId] = None
                                     if ('title' in apiResponseFromCache):
-                                        self.curArticleTitle = apiResponseFromCache['title']
+                                        threadTitles[self.curThreadId] = apiResponseFromCache['title']
                                     else:
-                                        self.curArticleTitle = None
+                                        threadTitles[self.curThreadId] = None
                         if not tagCacheLoaded:
                             # Sleep before call in case hacker news was called prior
                             time.sleep(.05)
@@ -157,9 +158,9 @@ def commentAndIdToTagSentiment(commentIdStructure):
                             else:
                                 threadTags[self.curThreadId] = None
                             if ('title' in apiResponse):
-                                self.curArticleTitle = apiResponse['title']
+                                threadTitles[self.curThreadId] = apiResponse['title']
                             else:
-                                self.curArticleTitle = None
+                                threadTitles[self.curThreadId] = None
                             if (CACHE_ON):
                                 # Cache article tags
                                 cache = open(tagCacheFileStr, "w")
@@ -167,6 +168,8 @@ def commentAndIdToTagSentiment(commentIdStructure):
                                 cache = tempfile.TemporaryFile()
                             cache.write(json.dumps(apiResponse))
                         cache.close()
+                        
+            self.curArticleTitle = threadTitles[self.curThreadId]
             
             if (self.curThreadId in threadTags):
                 tags = threadTags[self.curThreadId]
