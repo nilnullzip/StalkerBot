@@ -7,6 +7,11 @@ help:
 	echo "make pg      -- show number if queries for user pg"
 	echo "make log     -- real time log display"
 	echo "make flush   -- flush cache"
+	echo "make clean   -- clean up temporary files"
+	echo "make setup   -- setup new installation"
+	echo "make start   -- start or restart apache server"
+	echo "make update  -- update server from GitHub"
+	echo "make push    -- push local changes to GitHub"
 
 N :
 	cat /tmp/StalkerBot.log | grep Stalking\: | colrm 1 39 | wc -l
@@ -30,3 +35,17 @@ clean :
 	rm -f *~
 	rm -f */*~
 	rm -f */*.pyc
+setup :
+	mkdir -p options-and-settings/api-keys/
+	echo "make sure to copy key files to options-and-settings/api-keys/"
+
+start :
+	/etc/init.d/apache2 restart
+
+update :
+	cd /srv/www/htdocs/StalkerBot/
+	pwd
+	git pull --rebase
+
+push :
+	echo "To push changes to Github use \"git push --tags\""
