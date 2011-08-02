@@ -120,8 +120,8 @@ function on_submit(username) {
         complete: function() {
             $('#loading').hide();
             if (status == 0) {
-                $('#topic').append('<br/>User name not found. Might be a temporary outage. Sorry.<br/>');
-		$('#topic').append('<a href="http://stalkerbot.com/Stalkerbot_sample.png">Screen shot here.</a><br/>');
+                $('#topic').append('<br/>User not found. If you believe this incorrect, please let us know.<br/>');
+//		$('#topic').append('<a href="http://stalkerbot.com/Stalkerbot_sample.png">Screen shot here.</a><br/>');
                 }
             else if (status == 1) {
                 $('#topic').append('<br/>That one had nothing to say. Try another.<br/>');
