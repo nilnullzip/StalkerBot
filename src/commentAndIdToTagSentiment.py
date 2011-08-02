@@ -158,9 +158,15 @@ def commentAndIdToTagSentiment(commentIdStructure):
                         cache.close()
                         
             self.curArticleTitle = threadTitles[self.curThreadId]
+            # If thread title is missing, use URL
+            if (self.curArticleTitle == None):
+                self.curArticleTitle = self.curArticleUrl
             
             if (self.curThreadId in threadTags):
                 tags = threadTags[self.curThreadId]
+            # If tags missing, use empty list
+            if (tags == None):
+                tags = []
             
             sentCacheFileStr = SENTIMENT_CACHE_DIRECTORY + "/" + self.curCommentId
             sentCacheLoaded = False
@@ -183,9 +189,6 @@ def commentAndIdToTagSentiment(commentIdStructure):
                 cache.write(json.dumps(maxSentiments))
             cache.close()
             
-#            for tag in tags:
-#                structForJS = [tag, maxSentiments, self.curComment, self.curThreadUrl, self.curArticleUrl]
-#                tagSentUrlComment.append(structForJS)
             structForJS = [tags, maxSentiments, self.curComment, self.curThreadUrl, self.curArticleUrl, self.curArticleTitle, self.curCommentId]
             if (not (None in structForJS)):
                 tagSentUrlComment.append(structForJS)
