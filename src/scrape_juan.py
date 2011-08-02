@@ -37,15 +37,17 @@ def scrape (auser) :
     for user in userlist :
         # The following is a site that is surely not a JSON file to throw the error
         #FILE = urllib.urlopen("http://api.ihackernews.com")
-        FILE = urllib.urlopen("http://api.thriftdb.com/api.hnsearch.com/items/_search?filter[fields][username]=%s&filter[fields][type]=comment" % user)
+        FILE = urllib.urlopen("http://api.thriftdb.com/api.hnsearch.com/items/_search?filter[fields][username]=" + user + "&filter[fields][type]=comment&sortby=create_ts%20desc")
                     
         comments = []
         for comment in json.load(FILE) [u'results'] :
             item = comment['item']
-            comments.append( [str(item[u'discussion'][u'id']), convert( sanitize_html (item[u'text'])), str(item[u'id'])])
+            discussion = str(item[u'discussion'])
+            if (discussion != "None"):
+                comments.append( [str(item[u'discussion'][u'id']), convert( sanitize_html (item[u'text'])), str(item[u'id'])])
     return comments
 
-#print scrape("dstein64")
+#print scrape("pg")
 #commentIdStructure = scrape("pg")
 #print commentIdStructure
 #print len(commentIdStructure)
