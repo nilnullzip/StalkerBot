@@ -46,7 +46,7 @@ def scrape (auser) :
             FILE = open (filename, "r")
         comments = []
         for item in json.load(FILE) [u'comments'] :
-            comments.append( [str(item[u'postId']), convert( sanitize_html (item[u'comment']))])
+            comments.append( [str(item[u'postId']), convert( sanitize_html (item[u'comment'])), str(item[u'id'])])
     return comments
 
 #print scrape("pg")

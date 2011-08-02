@@ -3,6 +3,7 @@
 import json, threading, time, datetime, urllib, re, os, tempfile
 
 from scrape_kevin import scrape as scrape_kevin
+from scrape_juan import scrape as scrape_juan
 from tag_generation import articleApiRequest
 from effectcheck_api import getSentiment
 from read_key import readKey
@@ -87,7 +88,7 @@ def getMaxSentiments(sentimentDict):
 
 def scrape(userID):
     # Use scrape_kevin since http://api.ihackernews.com/ is not working (6/30/2011)
-    return scrape_kevin(userID)
+    return scrape_juan(userID)
 
 # commentIdStructure is a list of lists. The inner lists contain a String with a ThreadId
 # and the second element has the corresponding comment
