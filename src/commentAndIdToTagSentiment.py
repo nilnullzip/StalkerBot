@@ -38,6 +38,27 @@ def ensure_dir(f):
     d = os.path.dirname(f)
     if not os.path.exists(d):
         os.makedirs(d)
+        
+def scrapeIdToUrl (threadId):
+    url = "http://news.ycombinator.com/item?id=" + threadId
+    urlConn = urllib.urlopen(url)
+    siteHtml = urlConn.read()
+    urlConn.close()
+    reg = re.compile('<td class="title"><a href="([^"]*)">')
+    regSearch = reg.search(siteHtml)
+    if regSearch == None:
+        return None
+    link = regSearch.group(1)
+    # if the link is back to the current page, return None
+    return articleUrl
+
+def hnApiIdToUrl (threadId):
+    params = "%s?format=json" % threadId
+    # The following is a site that is surely not a JSON file to throw the error
+    #FILE = urllib.urlopen("http://api.ihackernews.com")
+    FILE = urllib.urlopen("http://api.ihackernews.com/post/%s" % params)
+    url = json.load(FILE)['url']
+    return url
 
 # Takes in a Hacker News Thread ID String
 def hnThreadIdToArticleUrl( threadId ):
@@ -52,20 +73,7 @@ def hnThreadIdToArticleUrl( threadId ):
                 articleUrl = json.loads(cache.read())
                 urlCacheLoaded = True
     if not urlCacheLoaded:
-        url = "http://news.ycombinator.com/item?id=" + threadId
-        urlConn = urllib.urlopen(url)
-        siteHtml = urlConn.read()
-        urlConn.close()
-        reg = re.compile('<td class="title"><a href="([^"]*)">')
-        regSearch = reg.search(siteHtml)
-        if regSearch == None:
-            return None
-        link = regSearch.group(1)
-        # if the link is back to the current page, return None
-        if link == "item?id=" + threadId:
-            articleUrl = None
-        else:
-            articleUrl = link
+        articleUrl = hnApiIdToUrl(threadId)
         if (CACHE_ON):
             # Cache
             cache = open(urlCacheFileStr, "w")
