@@ -35,14 +35,14 @@ def scrape (auser) :
     userlist = [auser]
 
     for user in userlist :
-        if (live == 1) :
-            # The following is a site that is surely not a JSON file to throw the error
-            #FILE = urllib.urlopen("http://api.ihackernews.com")
-            FILE = urllib.urlopen("http://api.thriftdb.com/api.hnsearch.com/items/_search?filter[fields][username]=%s&filter[fields][type]=comment" % user)
+        # The following is a site that is surely not a JSON file to throw the error
+        #FILE = urllib.urlopen("http://api.ihackernews.com")
+        FILE = urllib.urlopen("http://api.thriftdb.com/api.hnsearch.com/items/_search?filter[fields][username]=%s&filter[fields][type]=comment" % user)
+                    
         comments = []
         for comment in json.load(FILE) [u'results'] :
             item = comment['item']
-            comments.append( [str(item[u'parent_id']), convert( sanitize_html (item[u'text'])), str(item[u'id'])])
+            comments.append( [str(item[u'discussion'][u'id']), convert( sanitize_html (item[u'text'])), str(item[u'id'])])
     return comments
 
 #print scrape("dstein64")
