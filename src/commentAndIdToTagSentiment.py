@@ -38,31 +38,18 @@ def ensure_dir(f):
     d = os.path.dirname(f)
     if not os.path.exists(d):
         os.makedirs(d)
-        
-def scrapeIdToUrl (threadId):
-    url = "http://news.ycombinator.com/item?id=" + threadId
-    urlConn = urllib.urlopen(url)
-    siteHtml = urlConn.read()
-    urlConn.close()
-    reg = re.compile('<td class="title"><a href="([^"]*)">')
-    regSearch = reg.search(siteHtml)
-    if regSearch == None:
-        return None
-    link = regSearch.group(1)
-    # if the link is back to the current page, return None
-    return link
 
-def hnApiIdToUrl (threadId):
-    params = "%s?format=json" % threadId
-    # The following is a site that is surely not a JSON file to throw the error
-    #FILE = urllib.urlopen("http://api.ihackernews.com")
-    FILE = urllib.urlopen("http://api.ihackernews.com/post/%s" % params)
-    url = json.load(FILE)['url']
+def hnApiIdToUrl (sigId):
+    FILE = urllib.urlopen("http://api.thriftdb.com/api.hnsearch.com/items/%s" % sigId)
+    json_load = json.load(FILE)
+    url = json_load['url']
+    if (url == None):
+        url = "http://news.ycombinator.com/item?id=" + str(json_load['id'])
     return url
 
 # Takes in a Hacker News Thread ID String
-def hnThreadIdToArticleUrl( threadId ):
-    urlCacheFileStr = ARTICLE_URL_CACHE_DIRECTORY + "/" + threadId
+def hnThreadIdToArticleUrl( sigId ):
+    urlCacheFileStr = ARTICLE_URL_CACHE_DIRECTORY + "/" + sigId
     urlCacheLoaded = False
     if (CACHE_ON):
         ensure_dir(urlCacheFileStr)
@@ -73,7 +60,7 @@ def hnThreadIdToArticleUrl( threadId ):
                 articleUrl = json.loads(cache.read())
                 urlCacheLoaded = True
     if not urlCacheLoaded:
-        articleUrl = hnApiIdToUrl(threadId)
+        articleUrl = hnApiIdToUrl(sigId)
         if (CACHE_ON):
             # Cache
             cache = open(urlCacheFileStr, "w")
@@ -114,7 +101,8 @@ def commentAndIdToTagSentiment(commentIdStructure):
     
     class GetTags ( threading.Thread ):
         # Override Thread's __init__ method to accept the parameters needed:
-        def __init__ ( self, threadId, comment, commentId, threadIdLock ):
+        def __init__ ( self, sigId, threadId, comment, commentId, threadIdLock ):
+            self.sigId = sigId
             self.curThreadId = threadId
             self.curThreadUrl = "http://news.ycombinator.com/item?id=" + self.curThreadId
             self.curComment = comment
@@ -125,7 +113,7 @@ def commentAndIdToTagSentiment(commentIdStructure):
         def run ( self ):
             # No need to generate the same tags over and over
             with self.threadIdLock:
-                self.curArticleUrl = hnThreadIdToArticleUrl(self.curThreadId)
+                self.curArticleUrl = hnThreadIdToArticleUrl(self.sigId)
                 if self.curArticleUrl == None:
                     return
                 else:
@@ -206,13 +194,14 @@ def commentAndIdToTagSentiment(commentIdStructure):
     threadIdLocks = {}
     
     for commentIdElt in commentIdStructure:
-        threadId = commentIdElt[0]
-        comment = commentIdElt[1]
-        commentId = commentIdElt[2]
+        sigId = commentIdElt[0]
+        threadId = commentIdElt[1]
+        comment = commentIdElt[2]
+        commentId = commentIdElt[3]
         if (not (threadId in threadIdLocks)):
             threadIdLocks[threadId] = threading.Lock()
         threadIdLock = threadIdLocks[threadId]
-        threadList.append(GetTags ( threadId, comment, commentId, threadIdLock ))
+        threadList.append(GetTags ( sigId, threadId, comment, commentId, threadIdLock ))
         
     # Start Threads
     for thread in threadList:

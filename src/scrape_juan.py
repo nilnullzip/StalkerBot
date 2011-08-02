@@ -44,7 +44,9 @@ def scrape (auser) :
             item = comment['item']
             discussion = str(item[u'discussion'])
             if (discussion != "None"):
-                comments.append( [str(item[u'discussion'][u'id']), convert( sanitize_html (item[u'text'])), str(item[u'id'])])
+                comments.append( [str(item[u'discussion'][u'sigid']), str(item[u'discussion'][u'id']), convert( sanitize_html (item[u'text'])), str(item[u'id'])])
+#    for comment in comments:
+#        print comment
     return comments
 
 #print scrape("pg")
