@@ -26,7 +26,7 @@ pg :
 	cat /tmp/StalkerBot.log | grep Stalking\: | colrm 1 39 | grep pg | wc -l
 
 log :
-	tail -f /tmp/StalkerBot.log
+	tail -n 100 -f /tmp/StalkerBot.log
 
 flush :
 	rm -r /var/tmp/stalkerbot-cache
