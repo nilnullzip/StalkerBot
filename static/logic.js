@@ -1,3 +1,7 @@
+// Authors:
+//   Juan Pineda, GitHub: NilNullZip, juan@logician.com
+
+
 function on_submit(username) {
     $('#loading').show();
 

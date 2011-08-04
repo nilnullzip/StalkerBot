@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# Authors:
+#   Juan Pineda, GitHub: NilNullZip, juan@logician.com
+
 import cgitb
 cgitb.enable()
 

@@ -1,6 +1,9 @@
 import datetime
 import sys
 
+# Authors:
+#   Juan Pineda, GitHub: NilNullZip, juan@logician.com
+
 logging = True
 log_to_stderr = True
 log_file_name = "/tmp/StalkerBot.log"
