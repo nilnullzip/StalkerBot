@@ -237,7 +237,10 @@ def getUserTopicSentiments(userid):
         cache.write(json.dumps(scrapedComments))
     cache.close()
     
-    return commentAndIdToTagSentiment(scrapedComments)
+    if scrapedComments == None :
+        return None
+    else :
+        return commentAndIdToTagSentiment(scrapedComments)
 
 #scrape("dstein64")
 #print commentAndIdToTagSentiment(scrape("vijaydev"))
