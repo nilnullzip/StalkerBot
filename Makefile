@@ -48,4 +48,5 @@ update :
 	git pull --rebase
 
 push :
-	echo "To push changes to Github use \"git push --tags\""
+	echo "To push changes to Github use:"
+	echo "    git push; git push --tags"
