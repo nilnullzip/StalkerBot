@@ -1,8 +1,9 @@
-import datetime
-import sys
-
+# Copyright 2011 Juan Pineda
 # Authors:
 #   Juan Pineda, GitHub: NilNullZip, juan@logician.com
+
+import datetime
+import sys
 
 logging = True
 log_to_stderr = True

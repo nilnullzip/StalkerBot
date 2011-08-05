@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Copyright 2011 Juan Pineda
+#
 # Authors:
 #   Juan Pineda, GitHub: NilNullZip, juan@logician.com
 
