@@ -1,3 +1,5 @@
+# Copyright (C) 2011 by Kevin Nam Truong, Daniel Steinberg, Debasish Das, Juan Pineda, Melissa Miranda, and Victoria Pan 
+
 .SILENT:
 
 help:

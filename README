@@ -1,6 +1,16 @@
 StalkerBot: View Hacker News user's comments and state of mind
 --------------------------------------------------------------
-Writen by: Kevin Nam Truong, Daniel Steinberg, Debasish Das, Juan Pineda, Melissa Miranda, Victoria Pan.
+Copyright (C) 2011 by Kevin Nam Truong, Daniel Steinberg, Debasish Das, Juan Pineda, Melissa Miranda, and Victoria Pan 
+
+PLEASE SEE LICENSE FILE FOR LICENSE RESTRICTIONS
+
+Authors:
+ Kevin Nam Truong
+ Daniel Steinberg
+ Debasish Das
+ Juan Pineda, GitHub: NilNullZip, Email: juan@logician.com
+ Melissa Miranda
+ Victoria Pan
 
 You can run StalkerBot server two ways:
 
@@ -9,11 +19,9 @@ You can run StalkerBot server two ways:
 > cd src
 > python StalkerBot.py
 
-To access StalkerBot web page locally (under OSX) use the following URL:
+StalkerBot will print a message giving link to access page.
 
-http://localhost:8000/
-
-Log output will be written to StalkerBot/StalkerBot.log file.
+Log output will be written to /tmp/StalkerBot.log file.
 
 
 2) Apache StalkerBot server (production server):
