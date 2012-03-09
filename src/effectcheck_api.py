@@ -36,7 +36,9 @@ def getSentiment(content, key) :
   req.add_header("Authorization", authheader)
 
   params = urllib.urlencode({
-    'Category' : 'HackerNews Comments (Large)',
+    # No longer works
+    # 'Category' : 'HackerNews Comments (Large)',
+    'Category' : 'Generic',
     'Content'  : content
   })
 
