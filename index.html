@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <title>Stalkerbot by nilnullzip</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Stalkerbot</h1>
+        <h2>View Hacker News user's comments and state of mind</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/nilnullzip/StalkerBot/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/nilnullzip/StalkerBot/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/nilnullzip/StalkerBot" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <p>Copyright (C) 2011 by Kevin Nam Truong, Daniel Steinberg, Debasish Das, Juan Pineda, Melissa Miranda, and Victoria Pan </p>
+
+<p>PLEASE SEE LICENSE FILE FOR LICENSE RESTRICTIONS</p>
+
+<p>Authors:
+ Kevin Nam Truong
+ Daniel Steinberg
+ Debasish Das
+ Juan Pineda, GitHub: NilNullZip, Email: <a href="mailto:juan@logician.com">juan@logician.com</a>
+ Melissa Miranda
+ Victoria Pan</p>
+
+<p>You can run StalkerBot server two ways:</p>
+
+<p>1) Local StalkerBot simple server (prefered mode for debugging):</p>
+
+<blockquote>
+<p>cd src
+python StalkerBot.py</p>
+</blockquote>
+
+<p>StalkerBot will print a message giving link to access page.</p>
+
+<p>Log output will be written to /tmp/StalkerBot.log file.</p>
+
+<p>2) Apache StalkerBot server (production server):</p>
+
+<ul>
+<li>Clone the StalkerBot repository into the Apache htdocs directory.</li>
+<li>Edit httpd.conf to point DocumentRoot to StalkerBot/static directory.</li>
+<li>Edit httpd.conf so ScriptAlias /cgi-bin/ points to StalkerBot/cgi.</li>
+</ul><p>Make sure you change all the configuration lines relating to DocumentRoot and cgi.</p>
+
+<p>Log output will be written to /tmp/StalkerBot.log
+Cache will be created in /Var/tmp</p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
