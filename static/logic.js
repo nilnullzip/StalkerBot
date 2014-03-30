@@ -37,7 +37,7 @@ function on_submit(username) {
 
     var status = 0;
 
-    $.ajax({
+    var ajaxArgs = {
         url: url,
         dataType: 'json',
         data:{ userid:username},
@@ -147,13 +147,16 @@ function on_submit(username) {
             $('#loading').hide();
             if (status == 0) {
                 $('#topic').append('<br/>User not found. If you believe this incorrect, please let us know.<br/>');
-//		$('#topic').append('<a href="http://stalkerbot.com/Stalkerbot_sample.png">Screen shot here.</a><br/>');
                 }
             else if (status == 1) {
                 $('#topic').append('<br/>That one had nothing to say. Try another.<br/>');
                 }
         }
-    });
+    };
+
+    // the following no longer works as of March 15, 2014
+    //$.ajax(ajaxArgs);
+    
 }
 
 $('#st_form').submit(function(e) {
@@ -166,6 +169,10 @@ $.address.init(function() {
     // Initializes the plugin
     $('a.home_link').address();
 }).change(function(event) {
+    $('#topic').empty();
+    $('#topic').append('<br/><div style="text-align: left; margin: 0 auto; width: 600px">Stalkerbot no longer works. As of March 15, 2014, HNSearch was shut down. There are no current plans to transition Stalkerbot to use the new HN API powered by Algolia.</div><img src="img/depressedTransparent.png" style="width: 200px"><br/>');
+    return;
+
     var username = event.value.substr(1);
     if (username == '') {
         $('#topic').empty();

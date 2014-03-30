@@ -25,7 +25,7 @@
 #   Juan Pineda, GitHub: NilNullZip, juan@logician.com
 
 import cgitb
-cgitb.enable()
+#cgitb.enable()
 
 import SimpleHTTPServer
 import SocketServer
